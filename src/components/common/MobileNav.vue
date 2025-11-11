@@ -71,7 +71,16 @@ onBeforeUnmount(() => {
 .close{ position:absolute; top:10px; right:12px; width:32px; height:32px; border-radius:8px;
   border:none; background:transparent; color:#55433B; font-size:20px; line-height:1; cursor:pointer; }
 .close:hover{ background: rgba(0,0,0,.06); }
-.header-slot{ margin:8px 6px 12px; color:#55433B; opacity:.9; }
-.footer-slot{ margin:8px 6px 0; }
+.header-slot{
+   margin:8px 6px 12px; 
+   color:#55433B; 
+   opacity:.9; }
+.footer-slot{
+  position: sticky;          /* ✅ 영역 안에서만 세로로 “달라붙음” */
+  bottom: 20px;
+  margin: 8px 6px 0;
+  padding-top: 8px;
+  background: #f6f1e0;       /* 스크롤 겹침 방지용 배경 */
+   }
 .menu{ display:flex; flex-direction:column; gap:6px; padding:8px 4px; margin:6px 0 8px; flex:1 1 auto; overflow:auto; }
 </style>

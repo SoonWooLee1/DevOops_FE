@@ -1,1496 +1,246 @@
 <template>
-  	<div :class="$style.bookmarkAndFollowFeatures">
-    		<div :class="$style.bookmarkpage">
-      			<div :class="$style.container">
-        				<div :class="$style.heading1">
-          					<div :class="$style.div">북마크한 페이지들</div>
-        				</div>
-        				<div :class="$style.paragraph">
-          					<div :class="$style.bookmarkAndFollowFeaturesDiv">마음에 드는 기록들을 다시 살펴보세요</div>
-        				</div>
-      			</div>
-      			<div :class="$style.bookmarkAndFollowFeaturesContainer">
-        				<img :class="$style.icon" alt="" />
-        				<div :class="$style.textInput">
-          					<div :class="$style.div2">북마크한 글 검색하기...</div>
-        				</div>
-      			</div>
-      			<div :class="$style.container2">
-        				<div :class="$style.postcard">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div3">오늘 아침 일찍 일어나서 30분 산책했다! 요즘 계속 실패했었는데 드디어 성공. 아침 공기가 정말 상쾌했고, 하루를 여유롭게 시작할 수 있었다.</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#산책</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#아침루틴</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#성공</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.i">"나 자신이 기특하다. 계속 이어가보자!"</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button">
-              							<div :class="$style.paragraph6">
-                								<div :class="$style.div7">25</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.bookmarkAndFollowFeaturesButton">
-              							<div :class="$style.paragraph7">
-                								<div :class="$style.div7">22</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container14">
-              							<div :class="$style.paragraph8">
-                								<div :class="$style.div7">11월 10일</div>
-              							</div>
-              							<div :class="$style.container15">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Ooh</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph10">
-              							<div :class="$style.div10">감정 7/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.bookmarkAndFollowFeaturesPostcard">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div11">회의 중에 발표 준비를 제대로 못해서 버벅거렸다. 팀원들 앞에서 너무 부끄러웠고, 아직도 그 순간이 생각난다...</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#발표</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#준비부족</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#긴장</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.bookmarkAndFollowFeaturesI">"다음엔 미리 연습하자. 오늘도 끝까지 해냈다는 게 중요해."</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button2">
-              							<div :class="$style.paragraph16">
-                								<div :class="$style.div7">27</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button3">
-              							<div :class="$style.paragraph17">
-                								<div :class="$style.div7">5</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container27">
-              							<div :class="$style.paragraph18">
-                								<div :class="$style.div7">11월 10일</div>
-              							</div>
-              							<div :class="$style.container28">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Oops</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph20">
-              							<div :class="$style.div18">감정 6/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard2">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div3">오늘 아침 일찍 일어나서 30분 산책했다! 요즘 계속 실패했었는데 드디어 성공. 아침 공기가 정말 상쾌했고, 하루를 여유롭게 시작할 수 있었다.</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#산책</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#아침루틴</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#성공</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.i">"나 자신이 기특하다. 계속 이어가보자!"</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button4">
-              							<div :class="$style.paragraph26">
-                								<div :class="$style.div7">30</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button5">
-              							<div :class="$style.paragraph27">
-                								<div :class="$style.div7">12</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container40">
-              							<div :class="$style.paragraph28">
-                								<div :class="$style.div7">11월 9일</div>
-              							</div>
-              							<div :class="$style.container15">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Ooh</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph10">
-              							<div :class="$style.div10">감정 7/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard3">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div11">회의 중에 발표 준비를 제대로 못해서 버벅거렸다. 팀원들 앞에서 너무 부끄러웠고, 아직도 그 순간이 생각난다...</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#발표</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#준비부족</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#긴장</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.bookmarkAndFollowFeaturesI">"다음엔 미리 연습하자. 오늘도 끝까지 해냈다는 게 중요해."</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button6">
-              							<div :class="$style.paragraph36">
-                								<div :class="$style.div7">33</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button7">
-              							<div :class="$style.paragraph37">
-                								<div :class="$style.div7">19</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container53">
-              							<div :class="$style.paragraph38">
-                								<div :class="$style.div7">11월 9일</div>
-              							</div>
-              							<div :class="$style.container28">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Oops</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph40">
-              							<div :class="$style.div18">감정 4/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard4">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div3">오늘 아침 일찍 일어나서 30분 산책했다! 요즘 계속 실패했었는데 드디어 성공. 아침 공기가 정말 상쾌했고, 하루를 여유롭게 시작할 수 있었다.</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#산책</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#아침루틴</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#성공</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.i">"나 자신이 기특하다. 계속 이어가보자!"</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button8">
-              							<div :class="$style.paragraph46">
-                								<div :class="$style.div7">39</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button3">
-              							<div :class="$style.paragraph17">
-                								<div :class="$style.div7">5</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container66">
-              							<div :class="$style.paragraph48">
-                								<div :class="$style.div7">11월 8일</div>
-              							</div>
-              							<div :class="$style.container15">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Ooh</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph50">
-              							<div :class="$style.div18">감정 8/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard5">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div11">회의 중에 발표 준비를 제대로 못해서 버벅거렸다. 팀원들 앞에서 너무 부끄러웠고, 아직도 그 순간이 생각난다...</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#발표</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#준비부족</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#긴장</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.bookmarkAndFollowFeaturesI">"다음엔 미리 연습하자. 오늘도 끝까지 해냈다는 게 중요해."</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button10">
-              							<div :class="$style.paragraph56">
-                								<div :class="$style.div7">23</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button11">
-              							<div :class="$style.paragraph57">
-                								<div :class="$style.div7">8</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container53">
-              							<div :class="$style.paragraph58">
-                								<div :class="$style.div7">11월 8일</div>
-              							</div>
-              							<div :class="$style.container28">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Oops</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph40">
-              							<div :class="$style.div18">감정 3/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard6">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div3">오늘 아침 일찍 일어나서 30분 산책했다! 요즘 계속 실패했었는데 드디어 성공. 아침 공기가 정말 상쾌했고, 하루를 여유롭게 시작할 수 있었다.</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#산책</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#아침루틴</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#성공</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.i">"나 자신이 기특하다. 계속 이어가보자!"</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button12">
-              							<div :class="$style.paragraph66">
-                								<div :class="$style.div7">19</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button13">
-              							<div :class="$style.paragraph67">
-                								<div :class="$style.div7">9</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container92">
-              							<div :class="$style.paragraph68">
-                								<div :class="$style.div7">11월 7일</div>
-              							</div>
-              							<div :class="$style.container15">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Ooh</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph20">
-              							<div :class="$style.div18">감정 9/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard7">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div11">회의 중에 발표 준비를 제대로 못해서 버벅거렸다. 팀원들 앞에서 너무 부끄러웠고, 아직도 그 순간이 생각난다...</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#발표</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#준비부족</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#긴장</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.bookmarkAndFollowFeaturesI">"다음엔 미리 연습하자. 오늘도 끝까지 해냈다는 게 중요해."</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button8">
-              							<div :class="$style.paragraph46">
-                								<div :class="$style.div7">36</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button15">
-              							<div :class="$style.paragraph77">
-                								<div :class="$style.div7">10</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container105">
-              							<div :class="$style.paragraph78">
-                								<div :class="$style.div7">11월 7일</div>
-              							</div>
-              							<div :class="$style.container28">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Oops</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph80">
-              							<div :class="$style.div18">감정 5/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard8">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div3">오늘 아침 일찍 일어나서 30분 산책했다! 요즘 계속 실패했었는데 드디어 성공. 아침 공기가 정말 상쾌했고, 하루를 여유롭게 시작할 수 있었다.</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#산책</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#아침루틴</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#성공</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.i">"나 자신이 기특하다. 계속 이어가보자!"</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button8">
-              							<div :class="$style.paragraph46">
-                								<div :class="$style.div7">36</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button11">
-              							<div :class="$style.paragraph57">
-                								<div :class="$style.div7">8</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container40">
-              							<div :class="$style.paragraph28">
-                								<div :class="$style.div7">11월 6일</div>
-              							</div>
-              							<div :class="$style.container15">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Ooh</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph20">
-              							<div :class="$style.div18">감정 6/10</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div :class="$style.postcard9">
-          					<div :class="$style.container3">
-            						<div :class="$style.bookmarkAndFollowFeaturesParagraph">
-              							<div :class="$style.div11">회의 중에 발표 준비를 제대로 못해서 버벅거렸다. 팀원들 앞에서 너무 부끄러웠고, 아직도 그 순간이 생각난다...</div>
-            						</div>
-            						<div :class="$style.container4">
-              							<div :class="$style.container5">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#발표</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container6">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div5">#준비부족</div>
-                								</div>
-              							</div>
-              							<div :class="$style.container7">
-                								<div :class="$style.paragraph2">
-                  									<div :class="$style.div4">#긴장</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.container8">
-              							<div :class="$style.paragraph5">
-                								<i :class="$style.bookmarkAndFollowFeaturesI">"다음엔 미리 연습하자. 오늘도 끝까지 해냈다는 게 중요해."</i>
-              							</div>
-              							<div :class="$style.container9" />
-            						</div>
-          					</div>
-          					<div :class="$style.container10">
-            						<div :class="$style.button18">
-              							<div :class="$style.paragraph96">
-                								<div :class="$style.div7">29</div>
-              							</div>
-              							<img :class="$style.bookmarkAndFollowFeaturesIcon" alt="" />
-            						</div>
-            						<div :class="$style.button7">
-              							<div :class="$style.paragraph37">
-                								<div :class="$style.div7">19</div>
-              							</div>
-              							<img :class="$style.icon1" alt="" />
-            						</div>
-          					</div>
-          					<div :class="$style.container11" />
-          					<div :class="$style.container12" />
-          					<div :class="$style.container13">
-            						<div :class="$style.container53">
-              							<div :class="$style.paragraph38">
-                								<div :class="$style.div7">11월 6일</div>
-              							</div>
-              							<div :class="$style.container28">
-                								<div :class="$style.paragraph9">
-                  									<div :class="$style.ooh">Oops</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div :class="$style.paragraph20">
-              							<div :class="$style.div18">감정 6/10</div>
-            						</div>
-          					</div>
-        				</div>
-      			</div>
-    		</div>
-    		<div :class="$style.header">
-      			<div :class="$style.bookmarkAndFollowFeaturesHeader">
-        				<img :class="$style.buttonIcon" alt="" />
-        				<div :class="$style.navigation">
-          					<div :class="$style.button20">
-            						<div :class="$style.home">Home</div>
-          					</div>
-          					<div :class="$style.button21">
-            						<div :class="$style.home">기록하기</div>
-          					</div>
-          					<div :class="$style.button22">
-            						<div :class="$style.home">둘러보기</div>
-          					</div>
-          					<div :class="$style.button23">
-            						<div :class="$style.home">내 기록</div>
-          					</div>
-        				</div>
-      			</div>
-    		</div>
-  	</div>
-</template>
-<style  module>.bookmarkAndFollowFeatures {
-  	width: 100%;
-  	height: 3409px;
-  	position: relative;
-  	background-color: #fff;
-  	text-align: left;
-  	font-size: 32px;
-  	color: #55433b;
-  	font-family: Inter;
-}
-  	.bookmarkpage {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		background-color: #f6f1e0;
-    		width: 1324px;
-    		height: 3408.7px;
-    		display: flex;
-    		flex-direction: column;
-    		align-items: flex-start;
-    		padding: 118px 278px 0px;
-    		box-sizing: border-box;
-    		gap: 48px;
-  	}
-  	.container {
-    		align-self: stretch;
-    		height: 82.8px;
-    		display: flex;
-    		flex-direction: column;
-    		align-items: flex-start;
-    		gap: 12px;
-    		text-align: center;
-    		font-family: 'EB Garamond';
-  	}
-  	.heading1 {
-    		width: 768px;
-    		height: 48px;
-    		position: relative;
-  	}
-  	.div {
-    		position: absolute;
-    		top: 0.33px;
-    		left: 259.95px;
-    		letter-spacing: 0.64px;
-    		line-height: 48px;
-    		font-weight: 500;
-  	}
-  	.paragraph {
-    		width: 768px;
-    		height: 22.8px;
-    		position: relative;
-    		font-size: 15.2px;
-    		color: rgba(85, 67, 59, 0.6);
-    		font-family: Inter;
-  	}
-  	.bookmarkAndFollowFeaturesDiv {
-    		position: absolute;
-    		top: 0px;
-    		left: 263.57px;
-    		line-height: 22.8px;
-  	}
-  	.bookmarkAndFollowFeaturesContainer {
-    		align-self: stretch;
-    		height: 60px;
-    		border-radius: 16px;
-    		background-color: rgba(255, 255, 255, 0.5);
-    		border: 2px solid rgba(85, 67, 59, 0.2);
-    		box-sizing: border-box;
-    		display: flex;
-    		align-items: center;
-    		padding: 0px 24px;
-    		gap: 12px;
-    		font-size: 16px;
-    		color: rgba(85, 67, 59, 0.5);
-  	}
-  	.icon {
-    		height: 20px;
-    		width: 20px;
-    		position: relative;
-  	}
-  	.textInput {
-    		height: 24px;
-    		flex: 1;
-    		overflow: hidden;
-    		display: flex;
-    		align-items: center;
-  	}
-  	.div2 {
-    		position: relative;
-  	}
-  	.container2 {
-    		align-self: stretch;
-    		height: 2929.9px;
-    		position: relative;
-    		font-size: 14px;
-  	}
-  	.postcard {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.container3 {
-    		position: absolute;
-    		top: 82px;
-    		left: 34px;
-    		width: 700px;
-    		height: 134.7px;
-    		font-size: 16px;
-  	}
-  	.bookmarkAndFollowFeaturesParagraph {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		width: 700px;
-    		height: 54.4px;
-  	}
-  	.div3 {
-    		position: absolute;
-    		top: -0.67px;
-    		left: 0px;
-    		line-height: 27.2px;
-    		display: inline-block;
-    		width: 681px;
-  	}
-  	.container4 {
-    		position: absolute;
-    		top: 70.4px;
-    		left: 0px;
-    		width: 199.1px;
-    		height: 24px;
-    		font-size: 12px;
-    		color: #88aa82;
-  	}
-  	.container5 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		border-radius: 22369600px;
-    		background-color: rgba(136, 170, 130, 0.1);
-    		width: 53.7px;
-    		height: 24px;
-    		display: flex;
-    		align-items: center;
-    		padding: 0px 12px;
-    		box-sizing: border-box;
-  	}
-  	.paragraph2 {
-    		height: 16px;
-    		flex: 1;
-    		position: relative;
-  	}
-  	.div4 {
-    		position: absolute;
-    		top: 0.67px;
-    		left: 0px;
-    		line-height: 16px;
-    		display: inline-block;
-    		width: 30px;
-  	}
-  	.container6 {
-    		position: absolute;
-    		top: 0px;
-    		left: 61.66px;
-    		border-radius: 22369600px;
-    		background-color: rgba(136, 170, 130, 0.1);
-    		width: 75.7px;
-    		height: 24px;
-    		display: flex;
-    		align-items: center;
-    		padding: 0px 12px;
-    		box-sizing: border-box;
-  	}
-  	.div5 {
-    		position: absolute;
-    		top: 0.67px;
-    		left: 0px;
-    		line-height: 16px;
-    		display: inline-block;
-    		width: 52px;
-  	}
-  	.container7 {
-    		position: absolute;
-    		top: 0px;
-    		left: 145.4px;
-    		border-radius: 22369600px;
-    		background-color: rgba(136, 170, 130, 0.1);
-    		width: 53.7px;
-    		height: 24px;
-    		display: flex;
-    		align-items: center;
-    		padding: 0px 12px;
-    		box-sizing: border-box;
-  	}
-  	.container8 {
-    		position: absolute;
-    		top: 110.4px;
-    		left: 0px;
-    		width: 700px;
-    		height: 24.3px;
-    		font-size: 15.2px;
-    		color: rgba(85, 67, 59, 0.7);
-    		font-family: 'EB Garamond';
-  	}
-  	.paragraph5 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		width: 700px;
-    		height: 24.3px;
-  	}
-  	.i {
-    		position: absolute;
-    		top: -1px;
-    		left: 18px;
-    		line-height: 24.32px;
-    		display: inline-block;
-    		width: 240px;
-  	}
-  	.container9 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		border-left: 2px solid rgba(136, 170, 130, 0.3);
-    		box-sizing: border-box;
-    		width: 700px;
-    		height: 24.3px;
-  	}
-  	.container10 {
-    		position: absolute;
-    		top: 232.72px;
-    		left: 34px;
-    		width: 700px;
-    		height: 36.7px;
-    		display: flex;
-    		align-items: center;
-    		gap: 12px;
-  	}
-  	.button {
-    		height: 36px;
-    		width: 65px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph6 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 17px;
-    		height: 20px;
-  	}
-  	.div7 {
-    		position: absolute;
-    		top: 0.33px;
-    		left: 0px;
-    		line-height: 20px;
-  	}
-  	.bookmarkAndFollowFeaturesIcon {
-    		position: absolute;
-    		top: 10px;
-    		left: 12px;
-    		width: 16px;
-    		height: 16px;
-  	}
-  	.bookmarkAndFollowFeaturesButton {
-    		height: 36px;
-    		width: 49.9px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph7 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 16.9px;
-    		height: 20px;
-  	}
-  	.icon1 {
-    		position: absolute;
-    		top: 10px;
-    		left: 12px;
-    		width: 1px;
-    		height: 16px;
-  	}
-  	.container11 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0);
-    		border: 2px solid rgba(85, 67, 59, 0.1);
-    		box-sizing: border-box;
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.container12 {
-    		position: absolute;
-    		top: 251.05px;
-    		left: 0px;
-    		border-top: 0.7px solid rgba(85, 67, 59, 0.1);
-    		box-sizing: border-box;
-    		width: 768px;
-    		height: 0.7px;
-  	}
-  	.container13 {
-    		position: absolute;
-    		top: 34px;
-    		left: 34px;
-    		width: 700px;
-    		height: 32px;
-    		display: flex;
-    		align-items: center;
-    		justify-content: space-between;
-    		gap: 20px;
-    		color: rgba(85, 67, 59, 0.5);
-  	}
-  	.container14 {
-    		height: 32px;
-    		width: 128.7px;
-    		position: relative;
-  	}
-  	.paragraph8 {
-    		position: absolute;
-    		top: 6px;
-    		left: 70.72px;
-    		width: 58px;
-    		height: 20px;
-  	}
-  	.container15 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		border-radius: 22369600px;
-    		background-color: rgba(136, 170, 130, 0.2);
-    		width: 58.7px;
-    		height: 32px;
-    		display: flex;
-    		flex-direction: column;
-    		align-items: flex-start;
-    		padding: 0px 16px;
-    		box-sizing: border-box;
-    		color: #88aa82;
-    		font-family: 'EB Garamond';
-  	}
-  	.paragraph9 {
-    		align-self: stretch;
-    		height: 32px;
-    		position: relative;
-  	}
-  	.ooh {
-    		position: absolute;
-    		top: -0.33px;
-    		left: 0px;
-    		letter-spacing: 0.7px;
-    		line-height: 32px;
-  	}
-  	.paragraph10 {
-    		height: 20px;
-    		width: 57.9px;
-    		position: relative;
-    		color: #88aa82;
-  	}
-  	.div10 {
-    		position: absolute;
-    		top: 0.33px;
-    		left: 0px;
-    		line-height: 20px;
-    		display: inline-block;
-    		width: 58px;
-  	}
-  	.bookmarkAndFollowFeaturesPostcard {
-    		position: absolute;
-    		top: 295.39px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.div11 {
-    		position: absolute;
-    		top: -0.67px;
-    		left: 0px;
-    		line-height: 27.2px;
-    		display: inline-block;
-    		width: 691px;
-  	}
-  	.bookmarkAndFollowFeaturesI {
-    		position: absolute;
-    		top: -1px;
-    		left: 18px;
-    		line-height: 24.32px;
-    		display: inline-block;
-    		width: 360px;
-  	}
-  	.button2 {
-    		height: 36px;
-    		width: 64.5px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph16 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 16.5px;
-    		height: 20px;
-  	}
-  	.button3 {
-    		height: 36px;
-    		width: 41.5px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph17 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 8.5px;
-    		height: 20px;
-  	}
-  	.container27 {
-    		height: 32px;
-    		width: 134.2px;
-    		position: relative;
-  	}
-  	.paragraph18 {
-    		position: absolute;
-    		top: 6px;
-    		left: 76.21px;
-    		width: 58px;
-    		height: 20px;
-  	}
-  	.container28 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		border-radius: 22369600px;
-    		background-color: rgba(85, 67, 59, 0.1);
-    		width: 64.2px;
-    		height: 32px;
-    		display: flex;
-    		flex-direction: column;
-    		align-items: flex-start;
-    		padding: 0px 16px;
-    		box-sizing: border-box;
-    		color: #55433b;
-    		font-family: 'EB Garamond';
-  	}
-  	.paragraph20 {
-    		height: 20px;
-    		width: 58.7px;
-    		position: relative;
-    		color: #88aa82;
-  	}
-  	.div18 {
-    		position: absolute;
-    		top: 0.33px;
-    		left: 0px;
-    		line-height: 20px;
-    		display: inline-block;
-    		width: 59px;
-  	}
-  	.postcard2 {
-    		position: absolute;
-    		top: 590.77px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button4 {
-    		height: 36px;
-    		width: 65.7px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph26 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 17.7px;
-    		height: 20px;
-  	}
-  	.button5 {
-    		height: 36px;
-    		width: 48px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph27 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 15px;
-    		height: 20px;
-  	}
-  	.container40 {
-    		height: 32px;
-    		width: 122.2px;
-    		position: relative;
-  	}
-  	.paragraph28 {
-    		position: absolute;
-    		top: 6px;
-    		left: 70.72px;
-    		width: 51.4px;
-    		height: 20px;
-  	}
-  	.postcard3 {
-    		position: absolute;
-    		top: 886.16px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button6 {
-    		height: 36px;
-    		width: 65.8px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph36 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 17.8px;
-    		height: 20px;
-  	}
-  	.button7 {
-    		height: 36px;
-    		width: 48.2px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph37 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 15.2px;
-    		height: 20px;
-  	}
-  	.container53 {
-    		height: 32px;
-    		width: 127.6px;
-    		position: relative;
-  	}
-  	.paragraph38 {
-    		position: absolute;
-    		top: 6px;
-    		left: 76.21px;
-    		width: 51.4px;
-    		height: 20px;
-  	}
-  	.paragraph40 {
-    		height: 20px;
-    		width: 58.9px;
-    		position: relative;
-    		color: #88aa82;
-  	}
-  	.postcard4 {
-    		position: absolute;
-    		top: 1181.54px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button8 {
-    		height: 36px;
-    		width: 65.6px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph46 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 17.6px;
-    		height: 20px;
-  	}
-  	.container66 {
-    		height: 32px;
-    		width: 122.1px;
-    		position: relative;
-  	}
-  	.paragraph48 {
-    		position: absolute;
-    		top: 6px;
-    		left: 70.72px;
-    		width: 51.3px;
-    		height: 20px;
-  	}
-  	.paragraph50 {
-    		height: 20px;
-    		width: 58.6px;
-    		position: relative;
-    		color: #88aa82;
-  	}
-  	.postcard5 {
-    		position: absolute;
-    		top: 1476.93px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button10 {
-    		height: 36px;
-    		width: 65.4px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph56 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 17.4px;
-    		height: 20px;
-  	}
-  	.button11 {
-    		height: 36px;
-    		width: 41.6px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph57 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 8.6px;
-    		height: 20px;
-  	}
-  	.paragraph58 {
-    		position: absolute;
-    		top: 6px;
-    		left: 76.21px;
-    		width: 51.3px;
-    		height: 20px;
-  	}
-  	.postcard6 {
-    		position: absolute;
-    		top: 1772.31px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button12 {
-    		height: 36px;
-    		width: 63.2px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph66 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 15.2px;
-    		height: 20px;
-  	}
-  	.button13 {
-    		height: 36px;
-    		width: 41.7px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph67 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 8.7px;
-    		height: 20px;
-  	}
-  	.container92 {
-    		height: 32px;
-    		width: 121.4px;
-    		position: relative;
-  	}
-  	.paragraph68 {
-    		position: absolute;
-    		top: 6px;
-    		left: 70.72px;
-    		width: 50.7px;
-    		height: 20px;
-  	}
-  	.postcard7 {
-    		position: absolute;
-    		top: 2067.7px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button15 {
-    		height: 36px;
-    		width: 48.3px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph77 {
-    		position: absolute;
-    		top: 8px;
-    		left: 21px;
-    		width: 15.3px;
-    		height: 20px;
-  	}
-  	.container105 {
-    		height: 32px;
-    		width: 126.9px;
-    		position: relative;
-  	}
-  	.paragraph78 {
-    		position: absolute;
-    		top: 6px;
-    		left: 76.21px;
-    		width: 50.7px;
-    		height: 20px;
-  	}
-  	.paragraph80 {
-    		height: 20px;
-    		width: 58.5px;
-    		position: relative;
-    		color: #88aa82;
-  	}
-  	.postcard8 {
-    		position: absolute;
-    		top: 2363.08px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.postcard9 {
-    		position: absolute;
-    		top: 2658.47px;
-    		left: 0px;
-    		border-radius: 24px;
-    		background-color: rgba(255, 255, 255, 0.6);
-    		width: 768px;
-    		height: 271.4px;
-  	}
-  	.button18 {
-    		height: 36px;
-    		width: 65.2px;
-    		position: relative;
-    		border-radius: 22369600px;
-  	}
-  	.paragraph96 {
-    		position: absolute;
-    		top: 8px;
-    		left: 36px;
-    		width: 17.2px;
-    		height: 20px;
-  	}
-  	.header {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		background-color: rgba(246, 241, 224, 0.95);
-    		border-bottom: 0.7px solid rgba(136, 170, 130, 0.2);
-    		box-sizing: border-box;
-    		width: 1324px;
-    		height: 70.3px;
-    		display: flex;
-    		flex-direction: column;
-    		align-items: flex-start;
-    		padding: 0px 86px 0.7px;
-    		font-size: 14.4px;
-  	}
-  	.bookmarkAndFollowFeaturesHeader {
-    		align-self: stretch;
-    		height: 69.6px;
-    		display: flex;
-    		align-items: center;
-    		justify-content: space-between;
-    		padding: 0px 48px;
-    		box-sizing: border-box;
-    		gap: 20px;
-  	}
-  	.buttonIcon {
-    		height: 32px;
-    		width: 45.1px;
-    		object-fit: cover;
-  	}
-  	.navigation {
-    		height: 37.6px;
-    		width: 346.7px;
-    		position: relative;
-  	}
-  	.button20 {
-    		position: absolute;
-    		top: 0px;
-    		left: 0px;
-    		border-radius: 22369600px;
-    		width: 73.5px;
-    		height: 37.6px;
-  	}
-  	.home {
-    		position: absolute;
-    		top: 8px;
-    		left: 16px;
-    		letter-spacing: 0.29px;
-    		line-height: 21.6px;
-  	}
-  	.button21 {
-    		position: absolute;
-    		top: 0px;
-    		left: 81.48px;
-    		border-radius: 22369600px;
-    		background-color: #88aa82;
-    		width: 86.1px;
-    		height: 37.6px;
-    		color: #f6f1e0;
-  	}
-  	.button22 {
-    		position: absolute;
-    		top: 0px;
-    		left: 175.6px;
-    		border-radius: 22369600px;
-    		width: 86.1px;
-    		height: 37.6px;
-  	}
-  	.button23 {
-    		position: absolute;
-    		top: 0px;
-    		left: 269.73px;
-    		border-radius: 22369600px;
-    		width: 76.9px;
-    		height: 37.6px;
-  	}
+  <main class="bookmark-canvas">
+    <div class="ink-bg" aria-hidden="true">
+      <svg class="ink ink-a" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="#88AA82" opacity="0.25" />
+      </svg>
+      <svg class="ink ink-b" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="60" fill="#55433B" opacity="0.15" />
+      </svg>
+    </div>
+    <div class="paper-noise" aria-hidden="true"></div>
 
+    <section class="bookmark-hero">
+      <div class="title-block">
+        <h1 class="admin-title">북마크한 페이지들</h1>
+        <p class="admin-subtitle">마음에 드는 기록들을 다시 살펴보세요</p>
+      </div>
+
+      <div class="search-wrapper">
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="북마크한 글 검색하기..."
+          class="search-input"
+        />
+      </div>
+
+      <div class="bookmark-list">
+        <BookmarkCard
+          v-for="bookmark in filteredBookmarks"
+          :key="bookmark.bookmarkId"
+          :bookmark="bookmark"
+        />
+        
+        <div v-if="isLoading" class="loading-text">
+          북마크를 불러오는 중입니다...
+        </div>
+        
+        <div v-if="!isLoading && filteredBookmarks.length === 0" class="no-data">
+          북마크한 기록이 없습니다.
+        </div>
+      </div>
+    </section>
+  </main>
+</template>
+
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+// 1. 요청하신 경로로 수정합니다.
+import BookmarkCard from './BookMarkCard.vue'
+
+const bookmarks = ref([])
+const isLoading = ref(true)
+const searchQuery = ref('')
+const userId = 1 // 2. 임시 사용자 ID (로그인 구현 후 변경 필요)
+
+/**
+ * 3. 백엔드 API와 연동합니다.
+ * vite.config.js의 프록시 설정(/api -> localhost:8080)을 사용합니다.
+ * BookmarkQueryController의 getMyBookmarks를 호출합니다.
+ */
+const fetchBookmarks = async () => {
+  isLoading.value = true
+  try {
+    const res = await axios.get(`/api/bookmarks/user/${userId}`) 
+    bookmarks.value = res.data // DTO 배열을 bookmarks ref에 저장
+  } catch (err) {
+    console.error('북마크 데이터를 불러오는 중 오류 발생:', err)
+    bookmarks.value = [] // 오류 발생 시 초기화
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// 4. 검색어 기반 필터링 (클라이언트 사이드)
+const filteredBookmarks = computed(() => {
+  if (!searchQuery.value) {
+    return bookmarks.value
+  }
+  const query = searchQuery.value.toLowerCase()
+  // DTO 필드 기준으로 검색
+  return bookmarks.value.filter(bookmark =>
+    bookmark.title?.toLowerCase().includes(query) ||
+    bookmark.contentSnippet?.toLowerCase().includes(query) ||
+    bookmark.authorName?.toLowerCase().includes(query)
+  )
+})
+
+// 컴포넌트 마운트 시 데이터 로드
+onMounted(fetchBookmarks)
+</script>
+
+<style scoped>
+/* ========================
+   🎨 감성 북마크 페이지 스타일
+   (AdminMember.vue 스타일 기반)
+   ======================== */
+
+/* */
+.bookmark-canvas {
+  position: relative;
+  min-height: 100%; /* App.vue의 메인 영역을 채웁니다. */
+  background: var(--paper-bg, #fefdfb);
+  color: var(--ink, #3b302b);
+  overflow-x: hidden;
+  animation: fade-in-soft 0.8s ease both;
+  display: block; /* 스크롤이 가능하도록 block으로 변경 */
+  padding: 40px 16px;
+  padding-bottom: 60px; /* 하단 푸터 영역 확보 */
+}
+
+/* */
+.bookmark-hero {
+  position: relative;
+  z-index: 2;
+  max-width: 768px; /* 이미지와 유사한 너비로 조정 */
+  width: 90vw;
+  margin: 0 auto 40px auto; /* 중앙 정렬 및 하단 여백 */
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 40px 32px 60px;
+}
+
+/* 제목 (AdminMember.vue와 동일) */
+.title-block {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.admin-title {
+  font-family: 'EB Garamond', 'Noto Serif KR', serif;
+  font-size: 1.9rem;
+  color: rgba(85, 67, 59, 0.9);
+  margin-bottom: 6px;
+}
+.admin-subtitle {
+  color: rgba(85, 67, 59, 0.6);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+/* 검색창 스타일 */
+.search-wrapper {
+  margin-bottom: 24px;
+}
+.search-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(85, 67, 59, 0.2);
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+.search-input::placeholder {
+  color: rgba(85, 67, 59, 0.5);
+}
+.search-input:focus {
+  outline: none;
+  border-color: rgba(136, 170, 130, 0.7);
+  box-shadow: 0 0 0 3px rgba(136, 170, 130, 0.15);
+}
+
+
+/* 북마크 리스트 (그리드 레이아웃) */
+.bookmark-list {
+  display: grid;
+  /* 카드의 최소 너비를 320px로 설정하고,
+    여유 공간이 생기면 자동으로 여러 컬럼으로 나눕니다.
+  */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* 데이터 없음 / 로딩 (AdminMember.vue와 동일) */
+.no-data, .loading-text {
+  text-align: center;
+  color: rgba(60, 60, 60, 0.5);
+  padding: 40px 20px;
+  font-size: 1rem;
+  /* 컬럼 전체를 차지하도록 설정 */
+  grid-column: 1 / -1;
+}
+
+/* 배경 잉크 효과 (AdminMember.vue와 동일) */
+.ink-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.04;
+  z-index: 0;
+}
+.ink {
+  position: absolute;
+  width: 22rem;
+  height: 22rem;
+}
+.ink-a {
+  top: 15%;
+  left: 10%;
+  animation: breatheA 9s ease-in-out infinite;
+}
+.ink-b {
+  right: 12%;
+  bottom: 20%;
+  width: 16rem;
+  height: 16rem;
+  animation: breatheB 11s ease-in-out infinite;
+}
+.paper-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: 400px 400px;
+  opacity: 0.03;
+  z-index: 0;
+}
+
+/* 애니메이션 (AdminMember.vue와 동일) */
+@keyframes fade-in-soft {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes breatheA {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes breatheB {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-a, .ink-b { animation: none; }
+}
 </style>

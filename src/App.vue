@@ -3,6 +3,7 @@
     <HeaderView v-if="!route.matched.some(r => r.meta.isAdmin)"/>
     <main class="app-fixed-main">
       <RouterView />
+      <ToastContainer />
     </main>
     <FooterView v-if="!route.matched.some(r => r.meta.isAdmin)"/>
   </div>
@@ -11,10 +12,18 @@
 <script setup>
   import {ref} from 'vue';
   import {RouterView, useRoute} from 'vue-router';
+  import { useUserStore } from './stores/useUserInfo';
+
+  const userStore = useUserStore();
+  /* 여기서 마지막 토큰 쪾 [ROLE_USER] 혹은 [ROLE_USER,ROLE_ADMIN]*/
+  /*userStore.setUserInfo(10,0,0,0,0,0,0,'토큰',['ROLE_USER'])*/
 
 const route = useRoute();
 import FooterView from './components/common/FooterView.vue';
 import HeaderView from './components/common/HeaderView.vue';
+import ToastContainer from './components/common/ToastContainer.vue';
+  console.log("현재회원: ",userStore.memberId);
+  console.log("토큰:",userStore.token)
 </script>
 
 
@@ -26,7 +35,7 @@ import HeaderView from './components/common/HeaderView.vue';
   --paper-bg: #F6F1E0;
   --ink: #55433B;
   --header-h: 56px;   /* 헤더 높이 */
-  --footer-h: 44px;   /* 푸터 높이 */
+  --footer-h: 50px;   /* 푸터 높이 */
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 

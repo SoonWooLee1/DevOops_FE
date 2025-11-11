@@ -19,6 +19,11 @@
 
     <li class="menu-item">
       <span class="icon"><HomeIcon /></span>
+      <a href="/login">로그인</a>
+    </li>
+
+        <li class="menu-item">
+      <span class="icon"><HomeIcon /></span>
       <a href="/">홈</a>
     </li>
 
@@ -35,7 +40,12 @@
 
     <li class="menu-item">
       <span class="icon"><UsersIcon /></span>
-      <a href="/community">커뮤니티 피드</a>
+      <a href="/oops">Oops_Log</a>
+    </li>
+
+      <li class="menu-item">
+      <span class="icon"><UsersIcon /></span>
+      <a href="/ooh">Ooh_Log</a>
     </li>
 
     <li class="menu-item">
@@ -43,8 +53,14 @@
       <a href="/notice">공지사항</a>
     </li>
 
+    <li class="menu-item">
+      <span class="icon"><BellIcon /></span>
+      <a href="/mypage">마이페이지</a>
+    </li>
+
     <template #footer>
-      <blockquote class="quote">"실수는 버그가 아니라 성장의 패치노트입니다."</blockquote>
+      <blockquote class="quote">"실수는 버그가 아니라 <br> 
+      </br>성장의 패치노트입니다."</blockquote>
     </template>
   </MobileNav>
 </template>
@@ -110,7 +126,12 @@ const open = ref(false)
 }
 .hello{ color:#55433B; opacity:.9; line-height:1.7; margin:4px 0 8px; }
 .quote{
-  margin-top: 8px; padding: 12px 14px; border-radius: 8px;
-  background: rgba(0,0,0,.04); color:#55433B; font-size:14px;
+  margin-top: 8px; 
+  padding: 12px 14px; 
+  border-radius: 8px;
+  background: rgba(0,0,0,.04);
+  color:#55433B;
+  font-size:14px;
+  text-align: center;
 }
 </style>

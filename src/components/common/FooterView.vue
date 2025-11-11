@@ -6,6 +6,7 @@
       <RouterLink v-if="router.hasRoute('Notice')" class="footer-link" :to="{ name:'Notice' }">공지사항</RouterLink>
       <RouterLink v-if="router.hasRoute('Contact')" class="footer-link" :to="{ name:'Contact' }">문의</RouterLink>
     </nav>
+    <div class="copyright">© 2025 Oops_Log. 당신의 성장을 응원합니다.</div>
   </footer>
 </template>
 
@@ -34,4 +35,9 @@ const router = useRouter()
 .footer-link:hover{ text-decoration: underline; opacity: .9; }
 
 @media (hover:none){ .footer-link{ padding:6px 4px; } }
+
+.sep{ opacity: .3; }
+.copyright{
+  text-align: center; opacity: .4; font-size: 12px; line-height: 16px;
+}
 </style>
