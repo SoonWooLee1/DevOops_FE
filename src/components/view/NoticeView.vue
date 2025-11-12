@@ -9,7 +9,7 @@
       <p class="subtitle">Oops_Log의 소식과 안내를 전해드립니다</p>
 
       <!-- 검색바 -->
-      <SearchBar
+      <RecordSearchBar
         v-model="keyword"
         :busy="loading"
         @search="searchNow"
@@ -24,7 +24,6 @@
         type="button"
         class="write-btn"
         @click="goWrite"
-        aria-label="공지사항 작성"
       >
         + 공지 작성
       </button>
@@ -62,7 +61,7 @@ import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import NoticeRow from '../record/NoticeRow.vue'               // 프로젝트 경로에 맞춰 수정
 import { fetchNotices } from '../api/notice'                  // 시그니처: ({page,size,q}) 지원
-import SearchBar from '../common/SearchBar.vue'
+import RecordSearchBar from '../record/RecordSearchBar.vue'
 
 const router = useRouter()
 
@@ -71,7 +70,10 @@ const keyword = ref('')
 
 /* 작성 버튼 (권한에 맞게 교체) */
 const canWrite = ref(true)
-function goWrite() { router.push('/notice/insertNotice') }
+function goWrite() { 
+  console.log('insertNotice')
+  router.push('/notice/insertNotice') 
+}
 
 /* 목록 상태 */
 const items = ref([])
@@ -153,6 +155,7 @@ watch(keyword, (q) => {
 /* 무한스크롤: 검색어 유지하여 추가 페이지 요청 */
 onMounted(async () => {
   await loadNext(keyword.value)
+  
   observer = new IntersectionObserver(async ([entry]) => {
     if (entry.isIntersecting) await loadNext(keyword.value)
   }, { root: null, rootMargin: '400px 0px', threshold: 0 })

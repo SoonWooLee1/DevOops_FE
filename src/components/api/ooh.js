@@ -8,16 +8,35 @@ export async function fetchOohList({ page = 1, size = 10, title = '', content = 
   return data;
 }
 
-// 작성
-export async function createOoh({ oohUserId, oohTitle, oohContent, oohIsPrivate = 'N' }) {
-  const body = { oohUserId, oohTitle, oohContent, oohIsPrivate };
+// ✅ 단건 조회 (GET /ooh/{id})
+  export async function fetchOohById(id) {
+  const { data } = await api.get(`/ooh/${id}`);
+  return data;
+}
+
+export async function fetchOohDetail(id, commentLimit = 10) {
+  const { data } = await axios.get(`/ooh/${id}/detail`, { params: { commentLimit } })
+  return data
+}
+
+
+/// ✅ Ooh 등록: 태그 + 감정태그까지 함께 전송
+export async function createOoh({
+  oohUserId,
+  oohTitle,
+  oohContent,
+  oohIsPrivate = 'N',
+  tagIds = [],       // number[]
+  emoTagIds = []     // string[]
+}) {
+  const body = { oohUserId, oohTitle, oohContent, oohIsPrivate, tagIds, emoTagIds };
   const { data } = await api.post('/ooh/insertOoh', body);
   return data;
 }
 
 // 수정
-export async function updateOoh(id, { oohTitle, oohContent, oohIsPrivate = 'N' }) {
-  const body = { oohTitle, oohContent, oohIsPrivate };
+export async function updateOoh(id, { oohTitle, oohContent, oohIsPrivate = 'N', tagIds = [] }) {
+  const body = { oohTitle, oohContent, oohIsPrivate, tagIds };
   const { data } = await api.put(`/ooh/updateOoh/${id}`, body);
   return data;
 }

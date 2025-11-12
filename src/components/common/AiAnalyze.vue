@@ -3,7 +3,7 @@
     <header class="head">
       <div class="head-left">
         <span class="dot-icon" aria-hidden="true"></span>
-        <h2 class="title">AI 감정 분석</h2>
+        <h2 class="title">내용</h2>
       </div>
     </header>
 
@@ -104,10 +104,6 @@ const analyzeContent = async () => {
   padding: 16px 20px;
   transition: box-shadow .2s ease, background-color .2s ease;
 }
-.ai-card:hover {
-  box-shadow: 0 3px 8px rgba(85,67,59,0.1);
-}
-
 /* header 스타일 */
 .head {
   display: flex; align-items: center; justify-content: space-between;

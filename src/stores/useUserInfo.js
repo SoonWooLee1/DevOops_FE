@@ -12,7 +12,7 @@ export const useUserStore = defineStore(
     const gender=ref('')
     const signUpDate = ref('')
     const auth = ref([])
-    const token=ref('')
+    const token = ref('')
 
     const setUserInfo = (getId,getMemberId,getEmail,getName,getBirth,getGender,getSignUpDate,getAuth,getToken)=>{
       id.value = getId

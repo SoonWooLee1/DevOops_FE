@@ -17,12 +17,15 @@ const router = useRouter()
 
 <style scoped>
 .site-footer{
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
+  /* position: fixed;
+  left: 0; right: 0; bottom: 0; */
   height: calc(var(--footer-h) + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
   display: grid; place-items: center;
   z-index: 100;
+  
+  position: relative;
+  width: 100%;
 }
 
 .footer-nav{

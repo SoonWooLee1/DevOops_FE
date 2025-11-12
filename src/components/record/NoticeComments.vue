@@ -13,6 +13,10 @@
           <time class="ago">{{ toAgo(c.create_date || c.createDate || c.createdAt) }}</time>
         </div>
         <p class="body">{{ c.content }}</p>
+        <div v-if="Number(user) === c.userId" class="action-bar">
+            <button class="btn ghost" type="button" @click.stop="onEdit(c.id, c.noticeId)">✎ 수정</button>
+            <button class="btn danger" type="button" @click.stop="onDelete(c.id)">🗑 삭제</button>
+          </div>
       </li>
       <li v-if="hasNext" class="more">
         <button class="btn-more" type="button" :disabled="loading" @click="loadMore">더 보기</button>
@@ -51,8 +55,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { fetchNoticeComments, createNoticeComment, deleteComment } from '../api/comments'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { fetchNoticeComments, writeCommentAtNotice, hardDeleteComment } from '../api/comments'
+import { useUserStore } from '@/stores/useUserInfo';
+
+const userStore = useUserStore();
+const token = userStore.token;
+const user = ref(null);
+
+onMounted(() => {
+  user.value = userStore.id;
+  console.log("현재로그인한 사용자ID:", user.value);
+})
+
+const router = useRouter();
 
 const props = defineProps({
   noticeId: { type: [String, Number], required: true },
@@ -76,6 +93,7 @@ const numericId = computed(() => {
 })
 const canLoad = computed(() => Number.isFinite(numericId.value))
 
+
 function toAgo(iso){
   if(!iso) return '방금 전'
   const d = new Date(iso); if(isNaN(d)) return '방금 전'
@@ -92,6 +110,7 @@ async function loadMore(){
   loading.value=true; error.value=''
   try{
     const list = await fetchNoticeComments(numericId.value,{page:page.value,size:size.value})
+    console.log("댓글 list:", list.list);
     const arr = Array.isArray(list)? list : (list.list ?? [])
     const next = Array.isArray(list)? (arr.length===size.value) : !!list.hasNextPage
     const tc = Array.isArray(list)? (totalCount.value||arr.length) : (list.totalCount ?? totalCount.value)
@@ -105,7 +124,9 @@ async function onSubmit(){
   if(!text.value || !canLoad.value) return
   submitting.value=true; error.value=''
   try{
-    const saved = await createNoticeComment(numericId.value, text.value)
+    console.log("noticeId =", numericId.value);
+    console.log("token:", token);
+    const saved = await writeCommentAtNotice(numericId.value, text.value, token)
     const item = saved?.comment ?? saved?.data ?? saved ?? { id:Date.now(), content:text.value, create_date:new Date().toISOString() }
     comments.value.unshift(item)
     totalCount.value+=1; text.value=''
@@ -113,12 +134,29 @@ async function onSubmit(){
   finally{ submitting.value=false }
 }
 
-async function onDelete(c){
+function onEdit(commentId, noticeId) {
+  console.log("댓글ID:", commentId);
+  console.log("noticeId:", noticeId);
+  router.push({
+    name: 'UpdateComment',
+    params: { 
+      commentId, 
+      noticeId
+      },
+  })
+}
+
+async function onDelete(commentId){
+  console.log("댓글 ID: ",commentId);
   if(!canLoad.value || deletingId.value) return
   if(!confirm('이 댓글을 삭제하시겠어요?')) return
-  deletingId.value=c.id
-  try{ await deleteComment(c.id); comments.value = comments.value.filter(x=>x.id!==c.id); totalCount.value=Math.max(0,totalCount.value-1) }
-  finally{ deletingId.value=null }
+  deletingId.value=commentId
+  console.log("댓글 ID: ",commentId);
+  try{ await hardDeleteComment(commentId); comments.value = comments.value.filter(x=>x.id!==commentId); totalCount.value=Math.max(0,totalCount.value-1) }
+  finally{ 
+    deletingId.value=null;
+    loadMore();
+  }
 }
 
 function retry(){ error.value=''; loadMore() }
@@ -191,6 +229,17 @@ if (canLoad.value) loadMore()
 .btn-send:hover:not(:disabled){ background:#8faa85; }
 .btn-send:active:not(:disabled){ transform:scale(.97); }
 .btn-send:disabled{ background:#c7d5c4; cursor:not-allowed; opacity:.7; }
+
+.btn{
+  padding:8px 12px; border-radius:8px; border:1px solid var(--borderSoft);
+  background:#f5f7f3; cursor:pointer; font-weight:600;
+}
+.btn.ghost{ background:#eef4ea; }
+.btn.danger{ background:#f7ecec; border-color:rgba(200,0,0,.25); }
+.btn:hover{ filter:brightness(.98); }
+.action-bar{
+  display:flex; gap:8px; margin-top:10px; justify-content: flex-end;
+}
 
 .more{ display:flex; justify-content:center; }
 .btn-more{ background:transparent; border:1px solid var(--line); border-radius:999px; padding:6px 12px; cursor:pointer; }

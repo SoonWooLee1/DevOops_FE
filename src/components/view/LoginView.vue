@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useToastStore } from "@/stores/useToast";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/useUserInfo";
@@ -11,6 +11,11 @@ const password = ref("");
 const toastStore = useToastStore();
 const userStore = useUserStore();
 const router = useRouter();
+const entered = ref(false);
+
+onMounted(()=>{
+  requestAnimationFrame(() => (entered.value = true));
+})
 
 const handleLogin = async () => {
   if (!username.value || !password.value) {
@@ -49,23 +54,23 @@ const handleLogin = async () => {
 };
 
 const signUp = () => {
-  toastStore.showToast("회원가입 페이지로 이동합니다.");
+  // toastStore.showToast("회원가입 페이지로 이동합니다.");
   router.push("/signup");
 };
 
 const findId = () => {
-  toastStore.showToast("아이디 찾기 페이지로 이동합니다.");
-  // router.push("/find-id");
+  // toastStore.showToast("아이디 찾기 페이지로 이동합니다.");
+  router.push("/find-id");
 };
 
 const findPw = () => {
-  toastStore.showToast("비밀번호 찾기 페이지로 이동합니다.");
-  // router.push("/find-password");
+  // toastStore.showToast("비밀번호 찾기 페이지로 이동합니다.");
+  router.push("/find-pw");
 };
 </script>
 
 <template>
-  <div class="login-container">
+  <div class="login-container" :class="{ entered }">
     <h1 class="login-title">로그인</h1>
 
     <div class="login-form">
@@ -115,6 +120,17 @@ const findPw = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* ✅ 페이드 인 초기 상태 */
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.7s ease;
+}
+
+
+/* ✅ 애니메이션 완료 상태 */
+.login-container.entered {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* 제목 */

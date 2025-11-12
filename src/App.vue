@@ -15,8 +15,10 @@
   import { useUserStore } from './stores/useUserInfo';
 
   const userStore = useUserStore();
-  /* 여기서 마지막 토큰 쪾 [ROLE_USER] 혹은 [ROLE_USER,ROLE_ADMIN]*/
-  /*userStore.setUserInfo(10,0,0,0,0,0,0,'토큰',['ROLE_USER'])*/
+  /* 여기서 마지막 토큰 쪽 [ROLE_USER] 혹은 [ROLE_USER,ROLE_ADMIN]*/
+  // userStore.setUserInfo(23,0,0,0,0,0,0,'$2a$10$7kpLFEqxa6CYUABUoqf5zOgOGj5FJvOTzBpAaOZR8EfK5XUAadFli',['ROLE_USER'])
+  // console.log("userStore id값: ",userStore)
+  // userStore.setUserInfo(10,0,0,0,0,0,0,'토큰',['ROLE_USER'])
 
 const route = useRoute();
 import FooterView from './components/common/FooterView.vue';
@@ -34,14 +36,15 @@ import ToastContainer from './components/common/ToastContainer.vue';
   --font-sans: 'Inter', system-ui, -apple-system, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --paper-bg: #F6F1E0;
   --ink: #55433B;
-  --header-h: 56px;   /* 헤더 높이 */
+  --header-h: 5px;   /* 헤더 높이 */
   --footer-h: 50px;   /* 푸터 높이 */
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-main, .main-canvas, #app > *:not(footer){
+/* [제거] 이 룰은 더 이상 필요 없습니다.
+/* main, .main-canvas, #app > *:not(footer){
   padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom));
-}
+} */
 
 /* ✅ 브라우저 기본 여백 제거 + 배경 전체 적용 */
 html, body, #app {
@@ -52,39 +55,56 @@ html, body, #app {
   background: var(--paper-bg);
   color: var(--ink);
 }
-body{ overflow:hidden; }  /* 본문 영역만 스크롤되게 */
+
+/* [수정] body의 스크롤을 허용합니다. */
+body{ 
+  overflow-y: auto; /* 'hidden' -> 'auto' */
+} 
 
 /* ✅ 페이지 컨테이너: 필요 시 스크롤 허용 */
+/* [제거] #app-canvas (기존 코드 유지) */
+/*
 #app-canvas {
   min-height: 100dvh;
   width: 100%;
   position: relative;
 }
+*/
 
 /* 전역 종이 질감 오버레이 */
 .paper-noise {
-  opacity: .06;                 /* ↑ 일단 강하게 보기 */
-  background-size: 400px 400px; /* SVG 노이즈가 너무 커져 흐릿해지는 것 방지 */
-  mix-blend-mode: multiply;     /* 종이 질감 느낌 유지 */
+  opacity: .06;                 
+  background-size: 400px 400px; 
+  mix-blend-mode: multiply;     
 }
 
-/* 콘텐츠가 질감 위로 오게 */
+/* [제거] #app-canvas > *:not(.paper-noise) (기존 코드 유지) */
+/*
 #app-canvas > *:not(.paper-noise) {
   position: relative;
   z-index: 1;
 }
+*/
 
+/* [수정] .app-fixed를 flex 컨테이너로 변경 */
 .app-fixed{
-  height: 100svh;       /* 모바일 뷰포트 대응 */
-  position: relative;
-  overflow: hidden;     /* 배경 이펙트가 삐져나가도 스크롤 안생김 */
+  /* height: 100svh; */
+  /* position: relative; */
+  /* overflow: hidden; */
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh; /* 뷰포트 최소 높이 */
 }
 
-/* 헤더/푸터를 제외한 ‘본문 영역’만 스크롤 */
+/* [수정] .app-fixed-main을 flex-grow 및 padding-top으로 변경 */
 .app-fixed-main{
-  position: absolute;
-  inset: var(--header-h) 0 calc(var(--footer-h) + var(--safe-bottom)) 0;
-  overflow: auto;       /* 여기서만 스크롤 */
-  -webkit-overflow-scrolling: touch;
+  /* position: absolute; */
+  /* inset: var(--header-h) 0 calc(var(--footer-h) + var(--safe-bottom)) 0; */
+  /* overflow: auto; */
+  /* -webkit-overflow-scrolling: touch; */
+
+  flex-grow: 1; /* 헤더와 푸터 사이의 모든 공간을 차지 */
+  padding-top: var(--header-h); /* 고정된 헤더가 콘텐츠를 가리지 않도록 */
 }
 </style>

@@ -8,39 +8,25 @@ const mapComment = (c) => ({
   createDate: c.create_date ?? c.createDate,
   userId: c.user_id ?? c.userId,
   noticeId: c.notice_id ?? c.noticeId,
+  isDeleted: c.is_deleted ?? c.isDeleted,
   oohId: c.ooh_id ?? c.oohId,
   oopsId: c.oops_id ?? c.oopsId,
   name: c.name ?? c.writerName, // 있으면 표시용
 });
 
 // --- Notice ---
-export const fetchNoticeComments = async (noticeId, { page = 1, size = 10 } = {}) => {
-  const { data } = await api.get(`/comments/notice-read/${noticeId}`);
-
-  // ① 배열로 내려오는 경우(현재 Postman 캡처)
-  if (Array.isArray(data)) {
-    // 최신순 정렬이 필요하면 아래 줄 유지(원치 않으면 제거)
-    const sorted = data.slice().sort((a, b) =>
-      new Date(b.create_date ?? b.createDate) - new Date(a.create_date ?? a.createDate)
-    );
-    const start = (page - 1) * size;
-    const end = start + size;
-    const slice = sorted.slice(start, end);
-    return {
-      list: slice.map(mapComment),
-      hasNextPage: end < sorted.length,
-      totalCount: sorted.length,
-    };
-  }
-
-  // ② 객체로 내려오는 경우(향후 서버가 페이징을 붙이면)
-  const rawList = data.noticeCommentList ?? data.list ?? [];
+// ✅ NoticeComments에서 호출하는 시그니처에 맞춘 어댑터
+export async function fetchNoticeComments(noticeId, { page = 1, size = 10 } = {}) {
+  // OOH: 전체 조회 (페이징 미지원이면 그냥 한 번에 받기)
+  const res = await api.get(`/comments/ooh-read/${noticeId}`)
+  const arr = Array.isArray(res.data) ? res.data : (res.data?.comments || [])
+  // NoticeComments가 기대하는 반환 포맷
   return {
-    list: rawList.map(mapComment),
-    hasNextPage: !!data.hasNextPage,
-    totalCount: data.totalCount ?? rawList.length,
-  };
-};
+    list: arr,
+    hasNextPage: false,                // 백엔드 페이징 없으니 false
+    totalCount: res.data?.totalCount ?? arr.length,
+  }
+}
 
 // --- Ooh / Oops (참고: 기존 코드 유지) ---
 export const fetchOohComments  = (oohId)  =>
@@ -50,12 +36,76 @@ export const fetchOopsComments = (oopsId) =>
   api.get(`/comments/oops-read/${oopsId}`).then(r => Array.isArray(r.data) ? r.data.map(mapComment) : r.data);
 
 // 생성
-export const createNoticeComment = (noticeId, content) =>
-  api.post(`/comments/notice-insert/${noticeId}`, { content }).then(r => r.data);
+export async function createNoticeComment(noticeId, text) {
+  const res = await api.post(
+    `/comments/ooh-insert/${noticeId}`,
+    { content: text },
+    { headers: { 'Content-Type': 'application/json' } }
+  )
+  // NoticeComments는 단일 댓글 객체를 기대함
+  return res.data?.comment ?? res.data ?? {
+    id: Date.now(),
+    content: text,
+    createdAt: new Date().toISOString()
+  }
+}
 
-// 수정 / 삭제
-export const updateComment = (commentId, content) =>
-  api.put(`/comments/update-comment/${commentId}`, { content }).then(r => r.data);
+// 공지사항에 댓글 작성
+export async function writeCommentAtNotice( noticeId, content, token ) {
+  const body = { content };
+  const { data } = await api.post(`/comments/notice-insert/${noticeId}`, body,{
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    }
+    });
+  return data;
+}
+
+// 댓글 수정
+export async function updateComment( commentId, content, token ) {
+  const formData = new FormData();
+  formData.append('content', content);
+
+  const { data } = await api.put(`/comments/update-comment/${commentId}`, formData,{
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+    }
+    });
+  return data;
+}
+
+
+// 댓글 hard delete
+export async function hardDeleteComment(commentId) {
+  const { data } = await api.delete(`/comments/hard-delete-comment/${commentId}`);
+  return data;
+}
+
+// oops기록에 댓글 작성
+export async function writeCommentAtOops({ content, oopsId, token }) {
+  const body = { content };
+  const { data } = await api.post(`/comments/oops-insert/${oopsId}`, body, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    }
+    });
+  return data;
+}
+
+// ooh기록에 댓글 작성
+export async function writeCommentAtOoh({ content, oohId, token }) {
+  const body = { content };
+  const { data } = await api.post(`/comments/ooh-insert/${oohId}`, body, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    }
+    });
+  return data;
+}
 
 export const deleteComment = (commentId) =>
   api.put(`/comments/delete-comment/${commentId}`).then(r => r.data);
