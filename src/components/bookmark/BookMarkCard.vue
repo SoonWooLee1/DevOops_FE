@@ -18,7 +18,7 @@
 <script setup>
 import { computed } from 'vue'
 
-// `bookmark` 객체를 props로 받습니다. (BookmarkItemDto와 일치)
+// `bookmark` 객체를 props로 받음
 const props = defineProps({
   bookmark: {
     type: Object,
@@ -26,7 +26,7 @@ const props = defineProps({
   }
 })
 
-// `recordType`에 따라 CSS 클래스를 동적으로 반환합니다.
+// `recordType`에 따라 CSS 클래스를 동적으로 반환
 const typeClass = computed(() => {
   return props.bookmark.recordType?.toLowerCase() === 'ooh' ? 'is-ooh' : 'is-oops'
 })
@@ -57,7 +57,6 @@ const formatDate = (dateStr) => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   padding: 20px 24px;
   transition: background-color 0.25s ease, transform 0.25s ease;
-  /* [!] cursor: pointer; 속성이 제거되었습니다. */
 }
 .postcard:hover {
   background-color: rgba(255, 255, 255, 0.9);

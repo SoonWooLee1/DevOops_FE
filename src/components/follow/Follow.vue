@@ -47,20 +47,16 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-import BookmarkCard from '../bookmark/BookMarkCard.vue' // [!] 북마크 카드 재사용
-// import { useUserStore } from '@/stores/useUserInfo'     // [!] 유저 스토어 임포트 (주석 처리)
+import BookmarkCard from '../bookmark/BookMarkCard.vue'
+// import { useUserStore } from '@/stores/useUserInfo'     // 유저 스토어 임포트 (주석 처리)
 
 const feed = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
-// const userStore = useUserStore() // [!] 스토어 사용 (주석 처리)
-// const userId = computed(() => userStore.id) // [!] 스토어에서 userId 가져오기 (주석 처리)
-const userId = 19 // 2. 임시 사용자 ID (로그인 구현 후 변경 필요)
+// const userStore = useUserStore() // 스토어 사용 (주석 처리)
+// const userId = computed(() => userStore.id) // 스토어에서 userId 가져오기 (주석 처리)
+const userId = 19 // 임시 사용자 ID (로그인 구현 후 변경 필요)
 
-/**
- * 백엔드 API와 연동합니다.
- * (새로 만든 /api/follow/feed/{userId} 호출)
- */
 const fetchFeed = async () => {
   // if (!userId.value) { // [!] 주석 처리
   //   isLoading.value = false
@@ -70,7 +66,7 @@ const fetchFeed = async () => {
   // }
   isLoading.value = true
   try {
-    // [!] .value 제거
+    // .value 제거
     const res = await axios.get(`/api/follow/feed/${userId}`) 
     feed.value = res.data // DTO 배열을 feed ref에 저장
   } catch (err) {
@@ -100,7 +96,7 @@ onMounted(fetchFeed)
 </script>
 
 <style scoped>
-/* BookMark.vue와 동일한 스타일 */
+
 .follow-canvas {
   position: relative;
   min-height: 100%;

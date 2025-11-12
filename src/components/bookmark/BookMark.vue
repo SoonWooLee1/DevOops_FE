@@ -47,18 +47,17 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-// 1. 요청하신 경로로 수정합니다.
 import BookmarkCard from './BookMarkCard.vue'
 
 const bookmarks = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
-const userId = 19 // 2. 임시 사용자 ID (로그인 구현 후 변경 필요)
+const userId = 19 // 임시 사용자 ID (로그인 구현 후 변경 필요)
 
-/**
- * 3. 백엔드 API와 연동합니다.
- * vite.config.js의 프록시 설정(/api -> localhost:8080)을 사용합니다.
- * BookmarkQueryController의 getMyBookmarks를 호출합니다.
+/*
+ * 백엔드 API와 연동
+ * vite.config.js의 프록시 설정(/api -> localhost:8080)을 사용
+ * BookmarkQueryController의 getMyBookmarks를 호출
  */
 const fetchBookmarks = async () => {
   isLoading.value = true
@@ -73,7 +72,7 @@ const fetchBookmarks = async () => {
   }
 }
 
-// 4. 검색어 기반 필터링 (클라이언트 사이드)
+// 검색어 기반 필터링 (클라이언트 사이드)
 const filteredBookmarks = computed(() => {
   if (!searchQuery.value) {
     return bookmarks.value
@@ -92,12 +91,7 @@ onMounted(fetchBookmarks)
 </script>
 
 <style scoped>
-/* ========================
-   🎨 감성 북마크 페이지 스타일
-   (AdminMember.vue 스타일 기반)
-   ======================== */
 
-/* */
 .bookmark-canvas {
   position: relative;
   min-height: 100%; /* App.vue의 메인 영역을 채웁니다. */
@@ -124,7 +118,6 @@ onMounted(fetchBookmarks)
   padding: 40px 32px 60px;
 }
 
-/* 제목 (AdminMember.vue와 동일) */
 .title-block {
   text-align: center;
   margin-bottom: 28px;
@@ -168,14 +161,11 @@ onMounted(fetchBookmarks)
 /* 북마크 리스트 (그리드 레이아웃) */
 .bookmark-list {
   display: grid;
-  /* 카드의 최소 너비를 320px로 설정하고,
-    여유 공간이 생기면 자동으로 여러 컬럼으로 나눕니다.
-  */
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
 }
 
-/* 데이터 없음 / 로딩 (AdminMember.vue와 동일) */
+/* 데이터 없음 / 로딩 */
 .no-data, .loading-text {
   text-align: center;
   color: rgba(60, 60, 60, 0.5);
@@ -185,7 +175,7 @@ onMounted(fetchBookmarks)
   grid-column: 1 / -1;
 }
 
-/* 배경 잉크 효과 (AdminMember.vue와 동일) */
+/* 배경 잉크 효과 */
 .ink-bg {
   position: absolute;
   inset: 0;
@@ -220,7 +210,7 @@ onMounted(fetchBookmarks)
   z-index: 0;
 }
 
-/* 애니메이션 (AdminMember.vue와 동일) */
+/* 애니메이션 */
 @keyframes fade-in-soft {
   from {
     opacity: 0;
