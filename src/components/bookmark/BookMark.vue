@@ -48,11 +48,12 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import BookmarkCard from './BookMarkCard.vue'
+import { useUserStore } from '@/stores/useUserInfo';
 
 const bookmarks = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
-const userId = 19 // 임시 사용자 ID (로그인 구현 후 변경 필요)
+const userStore = useUserStore();
 
 /*
  * 백엔드 API와 연동
@@ -61,8 +62,16 @@ const userId = 19 // 임시 사용자 ID (로그인 구현 후 변경 필요)
  */
 const fetchBookmarks = async () => {
   isLoading.value = true
+
+  if (!userStore.id) {
+    console.log('로그인되지 않은 사용자입니다.');
+    bookmarks.value = [];
+    isLoading.value = false;
+    return;
+  }
+
   try {
-    const res = await axios.get(`/api/bookmarks/user/${userId}`) 
+    const res = await axios.get(`/api/bookmarks/my`) 
     bookmarks.value = res.data // DTO 배열을 bookmarks ref에 저장
   } catch (err) {
     console.error('북마크 데이터를 불러오는 중 오류 발생:', err)

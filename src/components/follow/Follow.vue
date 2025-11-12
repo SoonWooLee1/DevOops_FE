@@ -48,26 +48,27 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import BookmarkCard from '../bookmark/BookMarkCard.vue'
-// import { useUserStore } from '@/stores/useUserInfo'     // 유저 스토어 임포트 (주석 처리)
+import { useUserStore } from '@/stores/useUserInfo'     // 유저 스토어 임포트
 
 const feed = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
-// const userStore = useUserStore() // 스토어 사용 (주석 처리)
+const userStore = useUserStore() // 스토어 사용 
 // const userId = computed(() => userStore.id) // 스토어에서 userId 가져오기 (주석 처리)
-const userId = 19 // 임시 사용자 ID (로그인 구현 후 변경 필요)
 
 const fetchFeed = async () => {
-  // if (!userId.value) { // [!] 주석 처리
-  //   isLoading.value = false
-  //   feed.value = []
-  //   console.error('로그인 정보가 없습니다.')
-  //   return
-  // }
-  isLoading.value = true
+  isLoading.value = true;
+
+  if (!userStore.id) {
+    isLoading.value = false
+    feed.value = []
+    console.error('로그인 정보가 없습니다.')
+    return
+  }
+  
   try {
-    // .value 제거
-    const res = await axios.get(`/api/follow/feed/${userId}`) 
+    // /api/follow/feed/my (인증된 사용자) 호출
+    const res = await axios.get(`/api/follow/feed/my`) 
     feed.value = res.data // DTO 배열을 feed ref에 저장
   } catch (err) {
     console.error('팔로우 피드를 불러오는 중 오류 발생:', err)
