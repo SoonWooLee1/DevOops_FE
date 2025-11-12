@@ -53,7 +53,7 @@ import BookmarkCard from './BookMarkCard.vue'
 const bookmarks = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
-const userId = 1 // 2. 임시 사용자 ID (로그인 구현 후 변경 필요)
+const userId = 19 // 2. 임시 사용자 ID (로그인 구현 후 변경 필요)
 
 /**
  * 3. 백엔드 API와 연동합니다.

@@ -57,7 +57,7 @@ const formatDate = (dateStr) => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   padding: 20px 24px;
   transition: background-color 0.25s ease, transform 0.25s ease;
-  cursor: pointer;
+  /* [!] cursor: pointer; 속성이 제거되었습니다. */
 }
 .postcard:hover {
   background-color: rgba(255, 255, 255, 0.9);
