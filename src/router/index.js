@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import { useUserStore } from '@/stores/useUserInfo'
 
 // Imports 각각 위치 맞춰서
 
@@ -199,6 +199,26 @@ const router = createRouter({
     //   component: 
     // },
 ],
+})
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  const userAuth = userStore.auth || []
+
+  // 관리자 전용 페이지 접근 시 검사
+  if (to.meta.isAdmin) {
+    if (userAuth.includes('ROLE_ADMIN')) {
+      // ✅ 관리자 권한 있음 → 통과
+      next()
+    } else {
+      // 🚫 관리자 아님 → 접근 차단
+      alert('관리자만 접근할 수 있습니다.')
+      next('/main')
+    }
+  } else {
+    // ✅ 일반 페이지 → 통과
+    next()
+  }
 })
 
 export default router

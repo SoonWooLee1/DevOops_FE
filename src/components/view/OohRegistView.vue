@@ -39,43 +39,53 @@
       <p class="hint">선택: {{ selectedTagIds.length }} / 3</p>
     </section>
 
-    <!-- 감정 분석 -->
+    <!-- 내용 -->
     <section class="field">
-            <AiAnalyze :text="form.oohContent" />
-
+      <label class="label" for="content">내용</label>
+      <textarea
+        id="content"
+        class="textarea"
+        rows="8"
+        v-model.trim="form.oohContent"
+        placeholder="오늘의 빛남을 적어보세요…"
+      />
       <div class="count">{{ (form.oohContent || '').length }}자</div>
+    </section>
+    
+
+    <!-- AI 분석 카드(버튼+피드백은 이 컴포넌트 안에서 처리) -->
+    <section class="field">
+      <AiAnalyze :text="form.oohContent" @aiResult="onAIResult" />
     </section>
 
     <div class="actions">
-      <!-- ✅ ‘초기화’ → ‘취소’로 변경 (뒤로가기) -->
       <button class="btn ghost" @click="onCancel">취소</button>
-      <!-- ✅ 연한 연두색 버튼 -->
       <button class="btn primary" :disabled="busy" @click="submit">
         {{ busy ? '저장 중…' : '등록' }}
       </button>
     </div>
-
-
   </main>
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/useUserInfo' // 회원 정보 저장한거 가져오기
+import { useUserStore } from '@/stores/useUserInfo'
 import { useToastStore } from "@/stores/useToast";
 import { createOoh } from '../api/ooh'
 import { fetchOohTagOptions } from '../api/tag'
-import AiAnalyze from '../common/AiAnalyze.vue'   // AI 답변
+
+// import AiAnalyze from '../common/AiAnalyze.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
-const toastStore = useToastStore();
-
-// 로그인/사용자 식별
+const toastStore = useToastStore()
+ 
+// 사용자 식별
 const currentUserId = computed(() => Number(userStore.id || 0))
 
-// 태그만 로드 (로그인 가드는 OohView가 이미 처리)
+// 태그 로드
 onMounted(async () => {
   try {
     tagOptions.value = await fetchOohTagOptions()
@@ -85,17 +95,15 @@ onMounted(async () => {
 })
 
 const form = reactive({
-  oohIsPrivate: 'N', // 공개: 'N', 비공개: 'Y'
+  oohIsPrivate: 'N',
   oohTitle: '',
   oohContent: '',
+  aiAnswer: '',
 })
 
-const tagOptions = ref([])       // [{id, name}]
-const selectedTagIds = ref([])   // number[]
+const tagOptions = ref([])
+const selectedTagIds = ref([])
 const busy = ref(false)
-const errorMsg = ref('')
-
-
 
 function toggleTag(tagId) {
   const numId = Number(tagId)
@@ -106,23 +114,16 @@ function toggleTag(tagId) {
 }
 
 function validate() {
-
-  if (!form.oohTitle) 
-    return toastStore.showToast('제목은 필수입니다.')
-  if (!form.oohContent) 
-    return toastStore.showToast('내용은 필수입니다.')
-  if (selectedTagIds.value.length > 3) 
-    return toastStore.showToast('태그는 최대 3개까지만 선택 가능합니다.')
-  if (form.oohIsPrivate !== 'Y' && form.oohIsPrivate !== 'N')
-    return toastStore.showToast('공개 설정 값이 올바르지 않습니다.')
+  if (!form.oohTitle) return toastStore.showToast('제목은 필수입니다.')
+  if (!form.oohContent) return toastStore.showToast('내용은 필수입니다.')
+  if (selectedTagIds.value.length > 3) return toastStore.showToast('태그는 최대 3개까지만 선택 가능합니다.')
+  if (form.oohIsPrivate !== 'Y' && form.oohIsPrivate !== 'N') return toastStore.showToast('공개 설정 값이 올바르지 않습니다.')
   return ''
 }
 
 async function submit() {
-  errorMsg.value = ''
   const v = validate()
   if (v) return
-
   busy.value = true
   try {
     await createOoh({
@@ -130,20 +131,24 @@ async function submit() {
       oohTitle: form.oohTitle,
       oohContent: form.oohContent,
       oohIsPrivate: form.oohIsPrivate,
-      tagIds: selectedTagIds.value.map(Number), // 숫자 보장
+      tagIds: selectedTagIds.value.map(Number),
     })
     toastStore.showToast('등록 완료!')
-    router.push({ name: 'oohList' }) // 목록으로 이동(이름/경로 맞춰주세요)
+    router.push({ name: 'Ooh' })
   } catch (e) {
     console.error(e)
-    const msg =
-      e?.response?.data?.message ||
-      e?.response?.data?.error ||
-      '등록에 실패했습니다.'
+    const msg = e?.response?.data?.message || e?.response?.data?.error || '등록에 실패했습니다.'
     toastStore.showToast(msg)
   } finally {
     busy.value = false
   }
+}
+
+function onAIResult({ feedback, relatedTags }) {
+  form.aiAnswer = feedback || ''
+  // 필요하면 AI가 추천한 감정 태그도 반영
+  // selectedTagIds.value = 관련 tag id 매칭 로직 추가 가능
+  toastStore.showToast('AI 피드백이 반영되었습니다.')
 }
 
 function onCancel() {
@@ -153,8 +158,6 @@ function onCancel() {
 
 <style scoped>
 :root { --ink:#55433B; --green:#88AA82; }
-
-/* 연한 연두색 */
 :root { --light-green: #D8F1D5; }
 
 .wrap{ max-width:720px; margin:0 auto; padding:24px }
@@ -176,20 +179,19 @@ function onCancel() {
 }
 .tag.active{ background:rgba(136,170,130,.15) }
 
-/* 버튼 */
 .btn{
   border:1px solid var(--green);
   padding:8px 12px; border-radius:10px;
   color:#fff; background:var(--green);
 }
+.btn:hover { background:#77a373; }
 .btn.ghost{
   background:#fff; color:var(--ink);
   border-color:rgba(136,170,130,.45)
 }
-/* ✅ 등록 버튼을 연한 연두색으로 */
 .btn.primary{
   background: var(--light-green);
-  color: #234;                 /* 대비 확보 */
+  color:#234;
   border-color: var(--light-green);
 }
 .btn:disabled{ opacity:.4; cursor:not-allowed }

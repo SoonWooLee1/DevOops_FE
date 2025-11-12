@@ -15,18 +15,34 @@ const mapComment = (c) => ({
 });
 
 // --- Notice ---
-// ✅ NoticeComments에서 호출하는 시그니처에 맞춘 어댑터
-export async function fetchNoticeComments(noticeId, { page = 1, size = 10 } = {}) {
-  // OOH: 전체 조회 (페이징 미지원이면 그냥 한 번에 받기)
-  const res = await api.get(`/comments/ooh-read/${noticeId}`)
-  const arr = Array.isArray(res.data) ? res.data : (res.data?.comments || [])
-  // NoticeComments가 기대하는 반환 포맷
-  return {
-    list: arr,
-    hasNextPage: false,                // 백엔드 페이징 없으니 false
-    totalCount: res.data?.totalCount ?? arr.length,
+export const fetchNoticeComments = async (noticeId, { page = 1, size = 10 } = {}) => {
+  const { data } = await api.get(`/comments/notice-read/${noticeId}`);
+
+  // ① 배열로 내려오는 경우(현재 Postman 캡처)
+  if (Array.isArray(data)) {
+    // 최신순 정렬이 필요하면 아래 줄 유지(원치 않으면 제거)
+    const sorted = data.slice().sort((a, b) =>
+      new Date(b.create_date ?? b.createDate) - new Date(a.create_date ?? a.createDate)
+    );
+    const start = (page - 1) * size;
+    const end = start + size;
+    const slice = sorted.slice(start, end);
+    return {
+      list: slice.map(mapComment),
+      hasNextPage: end < sorted.length,
+      totalCount: sorted.length,
+    };
   }
-}
+
+  // ② 객체로 내려오는 경우(향후 서버가 페이징을 붙이면)
+  const rawList = data.noticeCommentList ?? data.list ?? [];
+
+  return {
+    list: rawList.map(mapComment),
+    hasNextPage: !!data.hasNextPage,
+    totalCount: data.totalCount ?? rawList.length,
+  };
+};
 
 // --- Ooh / Oops (참고: 기존 코드 유지) ---
 export const fetchOohComments  = (oohId)  =>
@@ -84,7 +100,7 @@ export async function hardDeleteComment(commentId) {
 }
 
 // oops기록에 댓글 작성
-export async function writeCommentAtOops({ content, oopsId, token }) {
+export async function writeCommentAtOops( oopsId, content, token ) {
   const body = { content };
   const { data } = await api.post(`/comments/oops-insert/${oopsId}`, body, {
     headers: {
@@ -96,7 +112,7 @@ export async function writeCommentAtOops({ content, oopsId, token }) {
 }
 
 // ooh기록에 댓글 작성
-export async function writeCommentAtOoh({ content, oohId, token }) {
+export async function writeCommentAtOoh( oohId, content, token ) {
   const body = { content };
   const { data } = await api.post(`/comments/ooh-insert/${oohId}`, body, {
     headers: {

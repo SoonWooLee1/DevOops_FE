@@ -72,7 +72,7 @@
 
     <li class="menu-item" v-if="isManager">
       <span class="icon"></span>
-      <a href="/">관리자 페이지</a>
+      <a href="/admin">관리자 페이지</a>
     </li>
 
     <!-- <li class="menu-item">

@@ -3,7 +3,7 @@
         <calendar-heatmap
       :values="values"
       :end-date="endDate"
-      :range-color="['#FDE7ED', '#F8CBD9', '#F1AFC6', '#E88CAB', '#BF4E70']"
+      :range-color="['#F7E6C5', '#EDD192', '#E3B765', '#D59D4A', '#A57033']"
       :round="3"
     />
     </div>
@@ -14,6 +14,9 @@ import { ref, onMounted } from 'vue';
 import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import { dailyCountOopsRecord, oopsDailyCount } from '@/components/api/recordhistory';
 import { useUserStore } from '@/stores/useUserInfo';
+import { useToastStore } from "@/stores/useToast";
+
+const toastStore = useToastStore();
 
 const userStore = useUserStore();
 const token = userStore.token;
@@ -35,7 +38,7 @@ onMounted(async () => {
             count: item.record_count  // record_count가 해당 날짜 기록 수
         }))
     } else {
-        alert('기록 집계 실패');
+        toastStore.showToast('기록 집계 실패');
     }
 
 })

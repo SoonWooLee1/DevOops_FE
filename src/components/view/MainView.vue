@@ -35,7 +35,7 @@
       </div>
 
       <div class="cta">
-        <button class="btn" @click="$emit('start')">
+        <button class="btn" @click="goLogin">
           <span class="btn__label">“오늘을 남기기”</span>
           <span class="btn__film" />
           <span class="btn__underline" />
@@ -54,6 +54,15 @@
    ※ 중요: 타입 표기(예: : number | undefined)를 쓰면 <script setup>에 lang="ts"가 필요.
            지금은 JS로 두고 타입 표기는 삭제해서 컴파일 오류를 방지 */
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+
+const router = useRouter()
+
+
+function goLogin() {
+  router.push('/login')
+}
 
 defineEmits(['start','open-menu'])
 
@@ -62,6 +71,9 @@ const props = defineProps({
   /** 문구 전환 주기(ms) */
   transitionMs: { type: Number, default: 5000 },
 })
+
+
+
 
 // 메인 글귀들 (원본 유지)
 const phrases = [
@@ -143,7 +155,7 @@ onUnmounted(() => {
   justify-items: center;
   align-content: center;
   gap: 30px;
-  padding: 40px 0 32px;    /* ✅ 약간의 상하 여백만 (큰 margin/translate 제거) */
+  padding: 120px 0 32px;    /* ✅ 약간의 상하 여백만 (큰 margin/translate 제거) */
 }
 
 /* ✅ (유지) 고정 높이 래퍼: 줄 전환 시 점프 방지 */

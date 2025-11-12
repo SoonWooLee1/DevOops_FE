@@ -28,7 +28,7 @@
           <div class="comment-body">
             <div class="comment-meta">
               <span class="comment-author">{{ c.author || '익명' }}</span>
-              <span class="comment-date">{{ formatDate(c.createdAt) }}</span>
+              <span class="comment-date">{{ formatDate(c.create_date) }}</span>
             </div>
 
             <!-- 수정 모드 -->
@@ -41,7 +41,7 @@
             </div>
             <p v-else class="comment-text">{{ c.content }}</p>
 
-            <div class="comment-actions">
+            <div v-if="Number(user) === c.user_id" class="comment-actions">
               <button class="btn link" @click="startEdit(c)">수정</button>
               <button class="btn link danger" @click="remove(c.id)">삭제</button>
             </div>
@@ -74,6 +74,21 @@
 
 import { ref, watch, onMounted } from 'vue'
 import api from '../api/client'
+import { useUserStore } from '@/stores/useUserInfo';
+import { writeCommentAtOoh, updateComment, hardDeleteComment } from '../api/comments';
+import { useToastStore } from "@/stores/useToast";
+
+const toastStore = useToastStore();
+
+
+const userStore = useUserStore();
+const token = userStore.token;
+const user = ref(null);
+
+onMounted(() => {
+  user.value = userStore.id;
+  console.log("현재로그인한 사용자ID:", user.value);
+})
 
 const props = defineProps({
   oohId: { type: [String, Number], required: true },
@@ -91,16 +106,15 @@ const editId = ref(null)
 const editText = ref('')
 
 function formatDate(iso) {
-  try {
-    const d = new Date(iso)
-    if (isNaN(d.getTime())) return 'Invalid Date'
-    return d.toLocaleString('ko-KR', {
-      year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit'
-    })
-  } catch {
-    return 'Invalid Date'
-  }
+  console.log("시간", iso)
+  if(!iso) return '방금 전'
+  const d = new Date(iso); if(isNaN(d)) return '방금 전'
+  const diff=(Date.now()-d.getTime())/1000
+  if(diff<60) return '방금 전'
+  if(diff<3600) return `${Math.floor(diff/60)}분 전`
+  if(diff<86400) return `${Math.floor(diff/3600)}시간 전`
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0')
+  return `${y}.${m}.${day}`
 }
 
 function syncUp() {
@@ -117,6 +131,7 @@ async function fetchList() {
 
     if (Array.isArray(arr)) {
       list.value = arr        // 서버가 빈 배열을 주면 그대로 표시(=댓글 없음)
+      console.log("댓글 List:", list);
       total.value = arr.length
     } else {
       // 구조 파싱 실패 → 초기 comments fallback
@@ -135,18 +150,18 @@ async function fetchList() {
 }
 
 async function send() {
-  if (!draft.value.trim()) return alert('메시지를 입력해주세요.')
+  if (!draft.value.trim()) return toastStore.showToast("메시지를 입력해주세요.");
   try {
-    await api.post(
-      `/comments/ooh-insert/${props.oohId}`,
-      { content: draft.value },
-      { headers: { 'Content-Type': 'application/json' } }
-    )
-    draft.value = ''
+console.log("ooh기록 ID:", props.oohId);
+console.log("입력할 내용:", draft.value);
+    const saved = await writeCommentAtOoh(props.oohId, draft.value, token);
+    const item = saved?.comment ?? saved?.data ?? saved ?? { id:Date.now(), content:draft.value, create_date:new Date().toISOString() };
+    list.value.unshift(item);
+    draft.value = '';
     await fetchList()
   } catch (e) {
     console.error('[댓글 작성 실패]', e?.response?.status, e?.response?.data || e)
-    alert('댓글 등록 실패(콘솔 확인)')
+    toastStore.showToast("댓글 등록 실패(콘솔 확인)");
   }
 }
 
@@ -159,25 +174,26 @@ function cancelEdit() {
   editText.value = ''
 }
 async function confirmEdit(commentId) {
-  if (!String(editText.value).trim()) return alert('내용을 입력해주세요.')
+  if (!String(editText.value).trim()) return toastStore.showToast('내용을 입력해주세요.')
   try {
-    await api.put(`/comments/update-comment/${commentId}`, { content: editText.value })
-    editId.value = null
-    editText.value = ''
-    await fetchList()
+    await updateComment(commentId, editText.value, token);
+    editId.value = null;
+    editText.value = '';
+    await fetchList();
   } catch (e) {
     console.error('[댓글 수정 실패]', e?.response?.status, e?.response?.data || e)
-    alert('댓글 수정 실패')
+    toastStore.showToast('댓글 수정 실패')
   }
 }
 async function remove(commentId) {
+  console.log("댓글 ID: ",commentId);
   if (!confirm('정말 삭제하시겠어요?')) return
   try {
-    await api.put(`/comments/delete-comment/${commentId}`)
-    await fetchList()
+    await hardDeleteComment(commentId);
+    await fetchList();
   } catch (e) {
     console.error('[댓글 삭제 실패]', e?.response?.status, e?.response?.data || e)
-    alert('댓글 삭제 실패')
+    toastStore.showToast('댓글 삭제 실패')
   }
 }
 

@@ -1,4 +1,3 @@
-<!-- src/views/OohDetailView.vue -->
 <template>
   <div class="page">
     <button class="back-link" type="button" @click="goList">
@@ -15,13 +14,14 @@
           </div>
         </div>
 
+        
+      
         <div class="post-actions">
-          <button class="btn ghost" type="button" @click="onEdit">
-            수정
-          </button>
-          <button class="btn danger" type="button" @click="onDelete">
-            삭제
-          </button>
+          <!-- ✅ 내 글일 때만 노출 -->
+          <div class="post-actions" v-if="isMine">
+            <button class="btn ghost" type="button" @click="onEdit">수정</button>
+            <button class="btn danger" type="button" @click="onDelete">삭제</button>
+          </div>
         </div>
       </header>
 
@@ -29,25 +29,31 @@
         <h1 class="title">{{ ooh.title }}</h1>
         <p class="content" v-if="ooh.content">{{ ooh.content }}</p>
 
-        <div class="chips-group" v-if="ooh.emotions && ooh.emotions.length">
-          <div class="group-label">감정</div>
-          <div class="chips">
-            <span class="chip" v-for="(e, i) in ooh.emotions" :key="'emo-'+i">{{ e }}</span>
-          </div>
+                <!-- AI 답변 -->
+        <div class="ai-answer" v-if="aiAnswer">
+          <div class="ai-chip">AI 피드백</div>
+          <p class="ai-text">{{ aiAnswer }}</p>
         </div>
 
-        <div class="chips-group" v-if="ooh.tags && ooh.tags.length">
-          <div class="group-label">태그</div>
-          <div class="chips">
-            <span class="chip tag" v-for="(t, i) in ooh.tags" :key="'tag-'+i">#{{ t }}</span>
-          </div>
+        <div class="chips-group" v-if="normalizedEmotions.length">
+          <div class="group-label">감정</div>
+            <div class="chips">
+              <span class="chip" v-for="(e, i) in normalizedEmotions" :key="'emo-'+i">{{ e }}</span>
+            </div>
         </div>
+
+        <div class="chips-group" v-if="normalizedTags.length">
+          <div class="group-label">태그</div>
+            <div class="chips">
+              <span class="chip tag" v-for="(t, i) in normalizedTags" :key="'tag-'+i">#{{ t }}</span>
+            </div>
+          </div>
       </section>
 
       <footer class="card-footer">
         <button class="like-btn" :class="{ active: likedByMe }" @click="toggleLike">
-          <span class="icon"></span>
-          <span>{{ likedByMe ? '좋아요 취소' : '좋아요' }}</span>
+        <img v-if="!likedByMe" src="/public/defaultHeart.png" alt="좋아요" style="width:20px; height:20px;">
+        <img v-if="likedByMe" src="/public/fullheart.png" alt="좋아요" style="width:20px; height:20px;">
         </button>
         <div class="dot">•</div>
         <div class="count"><span class="icon">좋아요</span> {{ likesCount }}</div>
@@ -79,8 +85,12 @@ import { useRoute, useRouter } from 'vue-router'
 import api from '../api/client'
 import OohComments from '../record/OohComments.vue'
 import { useToastStore } from "@/stores/useToast";
+import { useUserStore } from "@/stores/useUserInfo"; 
+import { pushOohLikes, checkOohLikesExist } from '../api/likes'
 
 const toastStore = useToastStore();
+const userStore  = useUserStore(); 
+const token = userStore.token;  
 
 const USE_NOTICE_COMMENTS = true
 
@@ -97,6 +107,39 @@ const likedByMe  = ref(false)
 const newComment     = ref('')
 const editCommentId  = ref(null)
 const editContent    = ref('')
+
+
+// ✅ 현재 로그인한 유저 ID
+const currentUserId = computed(() => Number(userStore.id || 0))
+//AI 답변
+const aiAnswer = computed(() => ooh.value?.aiAnswer ?? ooh.value?.ai_answer ?? '')
+// ✅ 태그 배열: ["목표달성"] 또는 [{tagName:"목표달성"}] 모두 허용
+
+const normalizedTags = computed(() => {
+  const src = ooh.value?.tags ?? []
+  if (!Array.isArray(src)) return []
+  return src
+    .map(t => typeof t === 'string'
+      ? t
+      : (t.tagName ?? t.tag_name ?? t.name ?? t.value ?? ''))
+    .filter(Boolean)
+})
+
+// ✅ 감정 배열: ["기쁨"] 또는 [{name:"기쁨"}] 모두 허용
+const normalizedEmotions = computed(() => {
+  const src = ooh.value?.emotions ?? ooh.value?.emo ?? ooh.value?.emotionList ?? []
+  if (!Array.isArray(src)) return []
+  return src
+    .map(e => typeof e === 'string' ? e : (e.name ?? e.value ?? ''))
+    .filter(Boolean)
+})
+
+
+// ✅ 내 글인지 여부: 글의 작성자(ooh.userId)와 현재 사용자 비교
+const isMine = computed(() => {
+  const postOwner = Number(ooh.value?.userId || 0)
+  return postOwner > 0 && currentUserId.value > 0 && postOwner === currentUserId.value
+})
 
 const goList = () => router.push({ name: 'Ooh' })
 const typeLabel = computed(() => {
@@ -123,12 +166,36 @@ function formatDate(iso) {
   }
 }
 
+async function checkLikeExist() {
+  try {
+    const response = await checkOohLikesExist(ooh.value.id, token);
+    if (response == "exist") {
+                likedByMe.value = true;
+            } else {
+                likedByMe.value = false;
+            }
+  } catch(err) {
+    console.error(err);
+    likedByMe.value = false;
+    toastStore.showToast('좋아요 여부 처리 실패');
+  }
+}
+
 onMounted(async () => {
   const id = route.params.id
   loading.value = true
   try {
     const detail = await api.get(`/ooh/${id}/detail`)
-    ooh.value = detail.data
+    const raw = detail.data || {}
+
+    // ✅ 작성자/닉네임 정규화
+    raw.userId   = raw.userId ?? raw.oohUserId ?? raw.writerId ?? 0
+    raw.userName = raw.userName ?? raw.writerName ?? raw.nickname ?? '익명'
+
+    // ✅ AI 답변 정규화 (DDL: ai_answer → 프론트: aiAnswer)
+    raw.aiAnswer = raw.aiAnswer ?? raw.ai_answer ?? raw.aiFeedback ?? raw.ai_feedback ?? raw.aiComment ?? raw.ai_comment ?? ''
+
+    ooh.value = raw
 
     if (!Array.isArray(ooh.value.comments)) {
       ooh.value.comments = []
@@ -137,10 +204,10 @@ onMounted(async () => {
 
     await tryFetchComments()
     await fetchLikesCount()
-    likedByMe.value = !!ooh.value?.likedByMe
+    checkLikeExist();
   } catch (e) {
     console.error(e)
-    error.value = '데이터를 불러오지 못했습니다.'
+    toastStore.showToast('데이터를 불러오지 못했습니다.')
   } finally {
     loading.value = false
   }
@@ -175,25 +242,36 @@ async function fetchLikesCount() {
     likesCount.value = typeof res.data === 'number' ? res.data : (res.data?.count ?? 0)
   } catch (err) {
     console.warn('[좋아요 수 조회 실패]', err)
+    toastStore.showToast('좋아요 수 조회에 실패했습니다.') 
     likesCount.value = ooh.value?.likesCount ?? 0
   }
 }
 
 async function toggleLike() {
   const userId = ooh.value.userId
+  console.log("좋아요를 위한 ooh기록자 ID:", userId)
+  console.log("토큰:", token);
+  console.log("로그인사용자:", userStore.id);
   if (!userId) 
     return toastStore.showToast('로그인이 필요합니다.')
+  if (userStore.id == userId) return toastStore.showToast('본인의 기록에는 좋아요를 누를 수 없습니다.')
   try {
-    likedByMe.value = !likedByMe.value
-    await api.get(`/likes/${userId}/ooh-like`, { params: { oohId: ooh.value.id } })
+    const response = await pushOohLikes(ooh.value.id, token);
+
+    console.log("response:", response);
+    if (response == "likes created") {
+                likedByMe.value = true;
+            } else {
+                likedByMe.value = false;
+            }
+            console.log("likedByme", likedByMe.value);
     await fetchLikesCount()
   } catch (err) {
     console.error(err)
-    likedByMe.value = !likedByMe.value
-    alert('좋아요 처리 실패')
+    likedByMe.value = false;
+    toastStore.showToast('좋아요 처리 실패')
   }
 }
-
 /* =========================
    [POST ACTIONS] 수정/삭제
    ========================= */
@@ -207,14 +285,16 @@ async function onDelete() {
   if (!ooh.value?.id) return
   if (!confirm('정말 이 글을 삭제하시겠어요?\n삭제 후에는 되돌릴 수 없습니다.')) return
   try {
-    await api.delete(`/ooh/hardDeleteOoh/${ooh.value.id}`)          // 하드 딜리트
-    alert('삭제되었습니다.')
+    await api.delete(`/ooh/hardDeleteOoh/${ooh.value.id}`) // 하드 딜리트
+    toastStore.showToast('삭제되었습니다.')
     goList()
   } catch (e) {
     console.error('[Ooh 삭제 실패]', e?.response?.status, e?.response?.data || e)
-    alert('삭제에 실패했습니다. 콘솔을 확인해주세요.')
+    toastStore.showToast('삭제에 실패했습니다. 콘솔을 확인해주세요.')
   }
 }
+
+
 </script>
 
 <style scoped>
@@ -300,13 +380,9 @@ async function onDelete() {
   display:flex; align-items:center; gap:12px; color:#6f6758; font-size:14px;
 }
 .like-btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  gap:0; padding:0 10px; border-radius:10px; border:1px solid #bfd7bc;
-  background:#e6f2e4; color:#355c33; cursor:pointer; font-weight:700; line-height:1;
-  text-align:center; transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  background: none; border: none; transform:translateY(3px);
 }
-.like-btn:hover{ transform:translateY(-1px); box-shadow:0 6px 16px rgba(34,30,20,.08); }
-.like-btn.active{ background:#d7eee3; border-color:#a7cfbb; }
+.like-btn:hover{ transform:translateY(2px); }
 .count{ display:inline-flex; align-items:center; gap:6px; }
 .icon{ font-size:14px; line-height:1; }
 .dot{ opacity:.45; }
@@ -325,5 +401,33 @@ async function onDelete() {
   .content{ font-size:15px; }
   .chips-group{ grid-template-columns:56px 1fr; }
   .post-actions .btn{ padding:6px 8px; font-size:12.5px; }
+}
+
+
+.ai-answer{
+  margin:14px 0 6px;
+  padding:14px 16px;
+  background:#f4fbf3;
+  border:1px solid #d7edd4;
+  border-radius:12px;
+  box-shadow:0 1px 0 rgba(0,0,0,.02) inset;
+}
+.ai-chip{
+  display:inline-block;
+  font-size:11.5px;
+  font-weight:800;
+  color:#2f5c2d;
+  background:#e6f5e4;
+  border:1px solid #cfe7cc;
+  padding:4px 8px;
+  border-radius:9999px;
+  margin-bottom:8px;
+  letter-spacing:.2px;
+}
+.ai-text{
+  white-space:pre-wrap;
+  color:#2f2d2a;
+  line-height:1.8;
+  font-size:14.5px;
 }
 </style>

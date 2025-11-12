@@ -25,7 +25,7 @@
 
           <!-- ✅ 지금은 모든 사용자에게 노출 -->
           <!-- 권한 적용하려면: v-if="canWrite" 로 변경 -->
-          <div class="action-bar">
+          <div v-if="role === 'ROLE_ADMIN'" class="action-bar">
             <button class="btn ghost" type="button" @click.stop="onEdit">✎ 수정</button>
             <button class="btn danger" type="button" @click.stop="onDelete">🗑 삭제</button>
           </div>
@@ -51,7 +51,8 @@ import { softDeleteNotice, hardDeleteNotice } from '../api/notice'
 import { useUserStore } from '@/stores/useUserInfo'
 
 const userStore = useUserStore()
-console.log(userStore.auth);
+const role = userStore.auth[0];
+console.log("로그인한 사용자의 권한:", role);
 
 const props = defineProps({
   item: { type: Object, required: true },

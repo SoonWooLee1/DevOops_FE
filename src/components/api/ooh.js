@@ -30,12 +30,21 @@ export async function createOoh({
   emoTagIds = []     // string[]
 }) {
   const body = { oohUserId, oohTitle, oohContent, oohIsPrivate, tagIds, emoTagIds };
+  // const body = { oohUserId, oohTitle, oohContent, oohIsPrivate };
   const { data } = await api.post('/ooh/insertOoh', body);
   return data;
 }
 
 // 수정
-export async function updateOoh(id, { oohTitle, oohContent, oohIsPrivate = 'N', tagIds = [] }) {
+export async function updateOoh(
+  id, 
+  { 
+    oohTitle, 
+    oohContent, 
+    oohIsPrivate = 'N', 
+    tagIds = [] 
+  }) 
+{
   const body = { oohTitle, oohContent, oohIsPrivate, tagIds };
   const { data } = await api.put(`/ooh/updateOoh/${id}`, body);
   return data;

@@ -146,6 +146,7 @@ const handleSubmit = async () => {
     })
     console.log("axios 통신 완료");
     toastStore.showToast("환영합니다! 당신의 서재가 준비되었습니다");
+    router.push('/')
   } catch (error) {
     toastStore.showToast("중복된 아이디 혹은 이메일이 존재합니다.");
   }
