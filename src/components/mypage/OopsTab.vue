@@ -65,7 +65,7 @@ onMounted(async () => {
         createdAt: it.oopsCreateDate ?? it.createdAt,
         tags: it.tagNames ?? it.tags ?? [],
         likes: it.likeCount ?? 0,
-        userName: it.writerName ?? "나의 기록"
+        userName: it.id
       }))
     } else {
       console.warn("예상치 못한 응답 형식:", res.data)

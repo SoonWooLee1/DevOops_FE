@@ -62,7 +62,7 @@ onMounted(async () => {
         createdAt: it.oohCreateDate ?? it.createdAt,
         tags: it.tagNames ?? it.tags ?? [],
         likes: it.likeCount ?? 0,
-        userName: it.writerName ?? "나의 기록"
+        userName: it.id
       }))
     } else {
       list.value = []

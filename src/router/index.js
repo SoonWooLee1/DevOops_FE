@@ -204,21 +204,31 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   const userAuth = userStore.auth || []
+  const token = userStore.token || ''
 
-  // 관리자 전용 페이지 접근 시 검사
+  // 관리자 전용 페이지 접근 차단
   if (to.meta.isAdmin) {
     if (userAuth.includes('ROLE_ADMIN')) {
-      // ✅ 관리자 권한 있음 → 통과
+      // 관리자 권한 있음 → 통과
       next()
     } else {
-      // 🚫 관리자 아님 → 접근 차단
+      // 관리자 아님 → 접근 차단
       alert('관리자만 접근할 수 있습니다.')
       next('/main')
     }
-  } else {
-    // ✅ 일반 페이지 → 통과
-    next()
+    return
   }
+
+  // 로그인 필요 페이지
+  if(to.path.startsWith('/mypage')) {
+    if(!token) {
+      alert('로그인 후 이용할 수 있습니다.')
+      next('/login')
+      return
+    }
+  }
+  
+  next()
 })
 
 export default router

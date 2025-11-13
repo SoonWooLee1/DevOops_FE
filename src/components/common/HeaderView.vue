@@ -71,7 +71,7 @@
     </li>
 
     <li class="menu-item" v-if="isManager">
-      <span class="icon"></span>
+      <span class="icon"><img src="/public/admin.png" alt="admin" width="18px" height="18px"></span>
       <a href="/admin">관리자 페이지</a>
     </li>
 

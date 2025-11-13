@@ -57,10 +57,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'   // ⚠️ watch 제거
 import { useRouter } from 'vue-router'
-import NoticeRow from '../record/NoticeRow.vue'               // 프로젝트 경로에 맞춰 수정
-import { fetchNotices } from '../api/notice'                  // 시그니처: ({page,size,q}) 지원
+import NoticeRow from '../record/NoticeRow.vue'
+import { fetchNotices } from '../api/notice'
 import RecordSearchBar from '../record/RecordSearchBar.vue'
 
 const router = useRouter()
@@ -121,7 +121,12 @@ async function loadNext(q = '') {
   error.value = ''
 
   try {
-    const { list, hasNextPage } = await fetchNotices({ page: page.value, size: size.value, q })
+    const { list, hasNextPage } = await fetchNotices({ 
+      page: page.value,
+      size: size.value, 
+      title: q,
+      content: q,
+     })
     const filtered = list.filter(n => (n.noticeTitle !== pinned.noticeTitle) && (n.noticeIsDeleted !== 'Y'))
     items.value.push(...filtered)
     hasNext.value = hasNextPage
@@ -133,26 +138,27 @@ async function loadNext(q = '') {
   }
 }
 
-/* 검색 실행: 목록 초기화 후 첫 페이지 재조회 */
-function searchNow(q) {
-  keyword.value = q ?? keyword.value
+/* 🔥 수정된 검색 실행 함수 */
+async function searchNow(q) {
+  // keyword.value = q ?? keyword.value   // ⚠️ 삭제: 중복 반응 방지
+  if (q !== undefined) keyword.value = q.trim() // 🔥 추가: 입력값 반영
   page.value = 1
   hasNext.value = true
   items.value = []
-  loadNext(keyword.value)
+  await loadNext(keyword.value)
 }
 
-/* (선택) 입력 변화에 따른 디바운스 자동검색 */
-let timer
-watch(keyword, (q) => {
-  clearTimeout(timer)
-  timer = setTimeout(() => {
-    page.value = 1; hasNext.value = true; items.value = []
-    loadNext(q)
-  }, 300)
-})
+/* ⚠️ 삭제(중복 검색 유발) */
+// let timer
+// watch(keyword, (q) => {
+//   clearTimeout(timer)
+//   timer = setTimeout(() => {
+//     page.value = 1; hasNext.value = true; items.value = []
+//     loadNext(q)
+//   }, 300)
+// })
 
-/* 무한스크롤: 검색어 유지하여 추가 페이지 요청 */
+/* 무한스크롤 */
 onMounted(async () => {
   await loadNext(keyword.value)
   
