@@ -63,7 +63,8 @@ const userStore = useUserStore();
 const fetchBookmarks = async () => {
   isLoading.value = true
 
-  if (!userStore.id) {
+  // ✅ [수정] 토큰 유무도 함께 체크
+  if (!userStore.id || !userStore.token) {
     console.log('로그인되지 않은 사용자입니다.');
     bookmarks.value = [];
     isLoading.value = false;
@@ -71,7 +72,12 @@ const fetchBookmarks = async () => {
   }
 
   try {
-    const res = await axios.get(`/api/bookmarks/my`) 
+    // ✅ [수정] axios.get 호출에 headers 객체를 추가하여 토큰 주입
+    const res = await axios.get(`/api/bookmarks/my`, {
+      headers: {
+        'Authorization': `Bearer ${userStore.token}`
+      }
+    }) 
     bookmarks.value = res.data // DTO 배열을 bookmarks ref에 저장
   } catch (err) {
     console.error('북마크 데이터를 불러오는 중 오류 발생:', err)
