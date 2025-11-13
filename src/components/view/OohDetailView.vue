@@ -74,6 +74,19 @@
           v-if="currentUserId">
           {{ isBookmarked ? '북마크 됨' : '북마크' }}
         </button>
+        <div class="report-wrap" v-if="!isMine">
+          <button class="report-btn" @click="openReportModal">
+            <span class="icon">신고</span>
+          </button>
+        </div>
+        <ReportModal
+          :visible="reportVisible"
+          target-type="ooh"
+          :target-id="ooh?.id"
+          @close="reportVisible = false"
+          @submitted="onReportSubmitted"
+        />
+        
       </footer>
     </div>
 
@@ -102,6 +115,7 @@ import OohComments from '../record/OohComments.vue'
 import { useToastStore } from "@/stores/useToast";
 import { useUserStore } from "@/stores/useUserInfo"; 
 import { pushOohLikes, checkOohLikesExist } from '../api/likes'
+import ReportModal from '@/components/common/ReportModal.vue'
 import { addBookmark, removeBookmark, fetchMyBookmarks } from '../api/bookmarks'
 import { followUser, unfollowUser, fetchMyFollowing } from '../api/follow'
 
@@ -120,6 +134,24 @@ const ooh = ref(null)
 
 const likesCount = ref(0)
 const likedByMe  = ref(false)
+
+const newComment     = ref('')
+const editCommentId  = ref(null)
+const editContent    = ref('')
+
+const reportVisible = ref(false);
+
+function openReportModal() {
+  if (!userStore.id) {
+    toastStore.showToast("로그인이 필요합니다.")
+    return;
+  }
+  reportVisible.value = true;
+}
+
+function onReportSubmitted() {
+  toastStore.showToast("신고가 접수되었습니다.")
+}
 
 const isBookmarked = ref(false);
 const isFollowing = ref(false);
@@ -560,6 +592,37 @@ async function toggleFollow() {
   color:#2f2d2a;
   line-height:1.8;
   font-size:14.5px;
+}
+
+.report-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.report-btn {
+  background: none;
+  border: 0;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #a12c0f;
+  opacity: 0.85;
+  border-radius: 8px;
+  transition: opacity .15s ease, color .15s ease, transform .15s ease;
+}
+
+.report-btn:hover {
+  opacity: 1;
+  color: #5e574b;
+  transform: translateY(-1px);
+}
+
+.report-btn .icon {
+  font-size: 14px;
+  font-weight: 600;
+  padding-bottom: 1px;
 }
 .follow-btn {
   padding: 4px 10px;

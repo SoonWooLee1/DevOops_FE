@@ -29,7 +29,7 @@
               <th>성별</th>
               <th>생년월일</th>
               <th>가입일</th>
-              <th>상태</th>
+              <th>상태변경</th>
             </tr>
           </thead>
           <tbody>
@@ -42,11 +42,13 @@
               <td>{{ formatDate(member.birth) }}</td>
               <td>{{ formatDate(member.sign_up_date) }}</td>
               <td>
-                <span
-                  :class="member.user_state?.toUpperCase() === 'A' ? 'status-active' : 'status-inactive'"
-                >
-                  {{ member.user_state?.toUpperCase() === 'A' ? '활성' : '비활성' }}
-                </span>
+                 <button
+                   class="state-toggle"
+                   :class="member.user_state === 'A' ? 'active' : 'inactive'"
+                   @click="toggleState(member)"
+                 >
+                   {{ member.user_state === 'A' ? '활성' : '비활성' }}
+                 </button>
               </td>
             </tr>
 
@@ -74,6 +76,28 @@ const members = ref([])
 const page = ref(1)
 const size = ref(10)
 const hasNextPage = ref(true)
+
+const toggleState = async (member) => {
+  try {
+    // 다음 상태로 토글
+    const newState = member.user_state === 'A' ? 'S' : 'A'
+
+    const res = await axios.patch(
+      `/api/admin/member/${member.id}/state`,
+      null,
+      { params: { state: newState } }
+    )
+
+    // 성공하면 화면에 즉시 반영
+    member.user_state = newState
+
+    console.log(`회원 상태 변경됨: ${member.id} → ${newState}`)
+  } catch (err) {
+    console.error('상태 변경 중 오류 발생:', err)
+    alert('상태 변경에 실패했습니다.')
+  }
+}
+
 
 const fetchMembers = async () => {
   try {
@@ -194,22 +218,27 @@ onMounted(fetchMembers)
   transition: background-color 0.25s ease;
 }
 
-/* 상태 배지 */
-.status-active {
-  background-color: rgba(136, 170, 130, 0.85);
-  color: white;
+.state-toggle {
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  color: #fff;
 }
 
-.status-inactive {
-  background-color: rgba(199, 96, 77, 0.85);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.8rem;
+.state-toggle.active {
+  background-color: rgba(136, 170, 130, 0.85);
 }
+
+.state-toggle.inactive {
+  background-color: rgba(199, 96, 77, 0.85);
+}
+
+.state-toggle:hover {
+  opacity: 0.9;
+}
+
 
 /* 페이지네이션 */
 .pagination {

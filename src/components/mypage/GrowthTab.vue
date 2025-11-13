@@ -167,10 +167,6 @@ function renderCharts() {
     xaxis: { categories: days.map(d => `${d}일`) },
     yaxis: { labels: { show: false } },
     legend: { position: 'top', horizontalAlign: 'right' },
-    title: {
-      text: `${selectedYear.value}년 ${selectedMonth.value}월 감정 변화`,
-      align: 'left'
-    }
   }
   dailyChart = new ApexCharts(document.querySelector('#dailyChart'), dailyOptions)
   dailyChart.render()

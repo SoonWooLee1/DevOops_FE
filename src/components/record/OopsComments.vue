@@ -1,6 +1,13 @@
 <!-- src/components/OopsComments.vue -->
 <template>
   <section class="oops-comments">
+    <ReportModal
+      :visible="reportVisible"
+      target-type="comment"
+      :target-id="reportTargetId"
+      @close="reportVisible = false"
+      @submitted="onReportSubmitted"
+    />
     <!-- 작성 -->
     <h3 class="write-title">댓글 남기기</h3>
     <textarea
@@ -29,6 +36,14 @@
             <div class="comment-meta">
               <span class="comment-author">{{ c.author || '익명' }}</span>
               <span class="comment-date">{{ formatDate(c.create_date) }}</span>
+              <button
+                class="comment-report-btn"
+                v-if="Number(user) !== c.user_id"
+                @click="openReportModalForComment(c.id)"
+              >
+                신고
+              </button>
+              
             </div>
 
             <!-- 수정 모드 -->
@@ -52,6 +67,7 @@
       <div v-else class="state">아직 응원 메시지가 없어요. 첫 메시지를 남겨보세요!</div>
       <!-- ✅ 여기까지 한 덩어리: (loading) → (error) → (있음) → (없음) -->
     </div>
+    
   </section>
 </template>
 
@@ -77,6 +93,8 @@ import api from '../api/client'
 import { useUserStore } from '@/stores/useUserInfo';
 import { writeCommentAtOops, updateComment, hardDeleteComment } from '../api/comments';
 import { useToastStore } from "@/stores/useToast";
+import ReportModal from '@/components/common/ReportModal.vue';
+
 
 const toastStore = useToastStore();
 
@@ -84,6 +102,23 @@ const toastStore = useToastStore();
 const userStore = useUserStore();
 const token = userStore.token;
 const user = ref(null);
+
+const reportVisible = ref(false);
+const reportTargetId = ref(null);
+
+function openReportModalForComment(commentId) {
+  if (!userStore.id) {
+    toastStore.showToast("로그인이 필요합니다.");
+    return;
+  }
+  reportTargetId.value = commentId;
+  reportVisible.value = true;
+}
+
+function onReportSubmitted() {
+  toastStore.showToast("신고가 접수되었습니다.");
+}
+
 
 onMounted(() => {
   user.value = userStore.id;
@@ -326,4 +361,32 @@ watch(() => props.oopsId, fetchList)
 /* ===== 상태 메시지 ===== */
 .state{ margin-top:8px; color:#7a6f5b; }
 .state.error{ color:#c0392b; }
+
+.comment-meta {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.comment-report-btn {
+  margin-left: auto; /* 🔥 오른쪽 끝으로 밀기 */
+  background: none;
+  border: 0;
+  font-size: 12px;
+  color: #a12c0f;
+  cursor: pointer;
+  opacity: 0.85;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: opacity .15s ease, color .15s ease, transform .15s ease;
+}
+
+.comment-report-btn:hover {
+  opacity: 1;
+  color: #5e574b;
+  transform: translateY(-1px);
+}
+
 </style>

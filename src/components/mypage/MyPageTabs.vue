@@ -20,10 +20,8 @@ const tabs = [
   { name:'mypage-oops',      label:'Oops 기록' },
   { name:'mypage-ooh',       label:'Ooh 기록' },
   { name:'mypage-growth',    label:'성장 그래프' },
-  { name:'mypage-reco',      label:'추천게시글' },
   { name:'mypage-bookmarks', label:'북마크기록' },
   { name:'mypage-followers', label:'팔로우기록' },
-  { name:'mypage-settings',  label:'설정' },
 ]
 </script>
 
@@ -38,6 +36,8 @@ const tabs = [
   display:flex;
   justify-content:center;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.25); /* 살짝 입체감 */
+  max-width: 100%;        /* 🔹 부모도 화면 안에서만 */
+  overflow: hidden;       /* 🔹 배경 밖으로 안 나가게 */
 }
 
 /* 리스트 */
@@ -51,8 +51,17 @@ const tabs = [
   font-size: 12px;
 }
 
-/* li */
-.tab-item{ display:flex; align-items:center; }
+.tab-item {
+  min-width: 0;
+}
+
+.tab-link {
+  display: inline-flex;
+  min-width: 0;          /* 줄어들 수 있게 강제 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* 링크(버튼) */
 .tab-link{
@@ -68,7 +77,9 @@ const tabs = [
   color:#2B2B2B !important;           /* 진한 회갈색 텍스트 */
   background:transparent;
   white-space:nowrap;
-  transition:background .18s ease, box-shadow .18s ease, border-color .18s ease;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
 }
 
 /* 활성 탭: 하얀 알약 + 은은한 그림자 */

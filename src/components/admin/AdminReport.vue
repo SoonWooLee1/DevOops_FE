@@ -47,7 +47,7 @@
                   {{ getStateText(report.state) }}
                 </span>
               </td>
-              <td>{{ report.category_id }}</td>
+              <td>{{ report.category_name }}</td>
               <td>{{ report.user_id }}</td>
               <td>{{ report.oops_id || '-' }}</td>
               <td>{{ report.ooh_id || '-' }}</td>

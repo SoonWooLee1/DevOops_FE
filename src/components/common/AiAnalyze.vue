@@ -1,17 +1,14 @@
 <!--AI -->
 <template>
-  <article class="ai-card">
     <header class="head">
       <div class="head-left">
         <span class="dot-icon" aria-hidden="true"></span>
-        <!-- 🔄 [변경] 제목을 'AI 분석'으로, 입력창은 부모에서만 -->
-        <h2 class="title">AI 분석</h2>
       </div>
     </header>
 
     <div class="divider" aria-hidden="true"></div>
 
-    <section class="body">
+    
 
       <!-- ✅ [유지/변경] 부모에서 온 text만 분석 -->
       <button
@@ -40,8 +37,6 @@
           </div>
         </div>
       </div>
-    </section>
-  </article>
 </template>
 
 <script setup>
@@ -88,14 +83,6 @@ async function analyzeContent () {
   --green:#88aa82; --green10:rgba(136,170,130,.08);
   --border:#88aa82; --borderSoft:rgba(136,170,130,.30);
 }
-
-.ai-card {
-  border: 1.6px solid var(--border);
-  background: var(--green10);
-  border-radius: 10px;
-  padding: 16px 20px;
-  transition: box-shadow .2s ease, background-color .2s ease;
-}
 /* header 스타일 */
 .head {
   display: flex; align-items: center; justify-content: space-between;
@@ -135,7 +122,7 @@ async function analyzeContent () {
 
 .analyze-btn {
   margin-top: 12px;
-  background: var(--green);
+  background: #7a8d56;
   color: #fff;
   font-weight: 600;
   border: none;

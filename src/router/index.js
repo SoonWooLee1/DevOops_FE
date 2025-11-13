@@ -130,12 +130,10 @@ const router = createRouter({
         { path: 'oops',      name:'mypage-oops',      component: () => import('../components/mypage/OopsTab.vue'),      meta:{label:'Oops 기록'} },
         { path: 'ooh',       name:'mypage-ooh',       component: () => import('../components/mypage/OohTab.vue'),       meta:{label:'Ooh 기록'} },
         { path: 'growth',    name:'mypage-growth',    component: () => import('../components/mypage/GrowthTab.vue'),    meta:{label:'성장 그래프', keepAlive:true} },
-        { path: 'reco',      name:'mypage-reco',      component: () => import('../components/mypage/RecommendTab.vue'), meta:{label:'추천게시글'} },
         { path: 'bookmarks', name:'mypage-bookmarks', component: BookMark,
         meta:{label:'북마크기록'} },
         { path: 'followers', name:'mypage-followers', component: Follow,
         meta:{label:'팔로우기록'} },
-        { path: 'settings',  name:'mypage-settings',  component: () => import('../components/mypage/SettingsTab.vue'),  meta:{label:'설정'} },
       ]
     },
 

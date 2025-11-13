@@ -1,6 +1,14 @@
 <!-- src/components/OohComments.vue -->
 <template>
   <section class="ooh-comments">
+    <!-- 신고 모달 -->
+    <ReportModal
+      :visible="reportVisible"
+      target-type="comment"
+      :target-id="reportTargetId"
+      @close="reportVisible = false"
+      @submitted="onReportSubmitted"
+    />
     <!-- 작성 -->
     <h3 class="write-title">댓글 남기기</h3>
     <textarea
@@ -29,6 +37,16 @@
             <div class="comment-meta">
               <span class="comment-author">{{ c.author || '익명' }}</span>
               <span class="comment-date">{{ formatDate(c.create_date) }}</span>
+               <!-- 신고 버튼 (본인 댓글이면 안보임) -->
+              <button
+                class="comment-report-btn"
+                v-if="Number(user) !== c.user_id"
+                @click="openReportModalForComment(c.id)"
+              >
+                신고
+              </button>
+
+              
             </div>
 
             <!-- 수정 모드 -->
@@ -77,13 +95,29 @@ import api from '../api/client'
 import { useUserStore } from '@/stores/useUserInfo';
 import { writeCommentAtOoh, updateComment, hardDeleteComment } from '../api/comments';
 import { useToastStore } from "@/stores/useToast";
+import ReportModal from '@/components/common/ReportModal.vue';
 
 const toastStore = useToastStore();
+const reportVisible = ref(false);
+const reportTargetId = ref(null);
 
 
 const userStore = useUserStore();
 const token = userStore.token;
 const user = ref(null);
+
+function openReportModalForComment(commentId) {
+  if (!userStore.id) {
+    toastStore.showToast("로그인이 필요합니다.");
+    return;
+  }
+  reportTargetId.value = commentId;
+  reportVisible.value = true;
+}
+
+function onReportSubmitted() {
+  toastStore.showToast("신고가 접수되었습니다.");
+}
 
 onMounted(() => {
   user.value = userStore.id;
@@ -289,7 +323,11 @@ watch(() => props.oohId, fetchList)
 }
 
 .comment-meta{
-  display:flex; gap:8px; align-items:baseline; margin-bottom:4px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 4px;
+  position: relative;
 }
 .comment-author{ font-weight:800; color:#33302a; }
 .comment-date{ font-size:12px; color:#8b8577; }
@@ -297,6 +335,25 @@ watch(() => props.oohId, fetchList)
 .comment-text{
   color:#3a3732; line-height:1.75; word-break:break-word;
   white-space:pre-wrap;
+}
+
+.comment-report-btn {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  font-size: 12px;
+  color: #a12c0f;
+  cursor: pointer;
+  opacity: 0.85;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: opacity .15s ease, color .15s ease, transform .15s ease;
+}
+
+.comment-report-btn:hover {
+  opacity: 1;
+  color: #5e574b;
+  transform: translateY(-1px);
 }
 
 /* 액션 */
