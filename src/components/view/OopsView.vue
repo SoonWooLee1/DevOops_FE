@@ -1,4 +1,4 @@
-<!-- src/views/OopsView.vue -->
+<!-- src/views/OohView.vue -->
 <template>
   <div class="oops-view">
     <!-- 상단 -->
@@ -17,7 +17,7 @@
       </button>
 
       <h1 class="title">Oops_Log</h1>
-      <p class="subtitle">오늘의 실수로 내일의 나를 디버그하다</p>
+      <p class="subtitle">작은 성취는, 함께할 때 더 반짝인다</p>
 
       <!-- 검색바 (RecordSearchBar 재사용) -->
       <RecordSearchBar
@@ -30,7 +30,7 @@
       <p style="margin-top:8px">검색어: {{ keyword }}</p>
     </div>
 
-    <!-- 목록 -->
+    <!-- 목록(private 추가(자신 혹은 관리자만 출력)) -->
     <section class="list">
         <RecordCard
           v-for="p in items"
@@ -38,6 +38,10 @@
           :post="p"
           record-type="oops"
           :fetch-likes="true"
+
+          :can-see-private="(p.userId === currentUserId) || isAdmin"  
+          :admin-view="isAdmin"         
+          
           @update:likes="val => p.likes = val"
           @click="() => goDetail(p.id)"  
         />
@@ -58,7 +62,7 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+import { ref, computed ,onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import RecordCard from '../record/RecordCard.vue'
 import RecordSearchBar from '../record/RecordSearchBar.vue'
@@ -69,8 +73,29 @@ import { useUserStore } from "@/stores/useUserInfo";
 const userStore = useUserStore()
 const toastStore = useToastStore();
 
-// const currentUserId = computed(() => Number(userStore.id || 0))
-// const isLoggedIn   = computed(() => !!userStore.token && currentUserId.value > 0)
+// 현재 사용자/관리자 여부 계산 추가
+const currentUserId = computed(() => Number(userStore.id || 0))
+
+
+// 관리자 판별: userStore.auth 기준
+// auth: [{ auth_name: 'ROLE_ADMIN' }, { auth_name: 'ROLE_USER' }] 같이 있을떄
+const isAdmin = computed(() => {
+  const authList = userStore.auth || []
+
+  if (!Array.isArray(authList)) return false
+
+  return authList.some(a => {
+    // a가 문자열로 올 수도 있고, 객체로 올 수도 있으니 둘 다 케이스 처리
+    const raw =
+      typeof a === 'string'
+        ? a
+        : (a.auth_name || a.authName || a.role || a.authority || a.name || '')
+
+    const upper = String(raw).toUpperCase()
+    // ROLE_ADMIN 이거나 ADMIN 이라는 단어가 들어있으면 관리자
+    return upper.includes('ROLE_ADMIN') || upper === 'ADMIN'
+  })
+})
 
 const canWrite = ref(true)
 function goWrite() {             
@@ -86,7 +111,7 @@ function goDetail(id) {
   try {
     router.push({ name: 'DetailOops', params: { id: String(id) } })
   } catch (e) {
-    console.warn('라우터가 이상합니다.', e)
+    toastStore.showToast ('라우터가 이상합니다.', e)
     router.push({ path: `/oops/${id}/detail` })
   }
 }
@@ -144,6 +169,7 @@ function normalizeItem(it) {
     ? it[keys.find(k => it?.[k] !== undefined)]
     : undefined
   const id        = pick('id', 'oopsId', 'oops_id')
+  const userId    = pick('userId', 'oopsUserId', 'writerId', 'authorId')
   const title     = pick('oopsTitle', 'title', 'oops_title')
   const body      = pick('oopsContent', 'content', 'oops_content', 'text', 'body')
   const isPrivate = pick('oopsIsPrivate', 'isPrivate', 'oops_is_private') === 'Y'
@@ -152,7 +178,7 @@ function normalizeItem(it) {
   const tags      = pick('tagNames', 'tags', 'tag_names') || []
   const likes     = pick('likeCount', 'likes', 'like_count') ?? 0
 
-  return { id, userName: name, title, content: body, isPrivate, createdAt, tags, likes }
+  return { id, userId, userName: name, title, content: body, isPrivate, createdAt, tags, likes }
 }
 /* ------------------------------------------- */
 
@@ -164,10 +190,23 @@ async function loadNext(q = '') {
 
   try {
     const raw = await fetchOopsList({ page: page.value, size: size.value, title: q, content: q })
-    // console.log('[/oops/all]', raw) // 필요 시 살리기
     const { list, hasNextPage } = adaptListResponse(raw)
     const mapped = list.map(normalizeItem)
-    items.value.push(...mapped)
+
+       // ✅ 관리자면 조건 없이 전부 보이게
+    //    관리자 아니면: 공개글 + (내 비공개글만)
+    const visible = mapped.filter(p => {
+      if (isAdmin.value) return true           // 관리자 → 다 보임
+      if (!p.isPrivate) return true            // 공개 글 → 다 보임
+      return p.userId === currentUserId.value  // 비공개 글 → 작성자 본인만
+    })
+onMounted(() => {
+  console.log('[OopsView] userStore.$state =>', JSON.stringify(userStore.$state, null, 2))
+  console.log('[OopsView] isAdmin.value =>', isAdmin.value)
+})
+
+
+    items.value.push(...visible)
     hasNext.value = hasNextPage
     page.value += 1
   } catch (e) {

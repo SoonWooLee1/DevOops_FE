@@ -20,7 +20,7 @@
 
       <!-- 작성 버튼 -->
       <button
-        v-if="canWrite"
+        v-if="role === 'ROLE_ADMIN'"
         type="button"
         class="write-btn"
         @click="goWrite"
@@ -62,6 +62,11 @@ import { useRouter } from 'vue-router'
 import NoticeRow from '../record/NoticeRow.vue'
 import { fetchNotices } from '../api/notice'
 import RecordSearchBar from '../record/RecordSearchBar.vue'
+import { useUserStore } from '@/stores/useUserInfo'
+
+const userStore = useUserStore()
+const role = userStore.auth[0];
+console.log("로그인한 사용자의 권한:", role);
 
 const router = useRouter()
 
@@ -69,7 +74,6 @@ const router = useRouter()
 const keyword = ref('')
 
 /* 작성 버튼 (권한에 맞게 교체) */
-const canWrite = ref(true)
 function goWrite() { 
   console.log('insertNotice')
   router.push('/notice/insertNotice') 

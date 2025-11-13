@@ -4,6 +4,7 @@
       :values="values"
       :end-date="endDate"
       :range-color="['#F6FCFD', '#E3F5FA', '#CAE8F4', '#A6DCEC', '#7CCFDF']"
+      :max="10"
       :round="3"
     />
     </div>

@@ -35,7 +35,7 @@
       </div>
 
       <div class="cta">
-        <button class="btn" @click="goLogin">
+        <button class="btn" @click="handleClick">
           <span class="btn__label">“오늘을 남기기”</span>
           <span class="btn__film" />
           <span class="btn__underline" />
@@ -53,15 +53,38 @@
 /* ✅ (변경) 전역 스크롤 제어 제거 + 이 컴포넌트는 타이머만 관리
    ※ 중요: 타입 표기(예: : number | undefined)를 쓰면 <script setup>에 lang="ts"가 필요.
            지금은 JS로 두고 타입 표기는 삭제해서 컴파일 오류를 방지 */
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, watch, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/useUserInfo'
 
-
+const userStore = useUserStore();
 const router = useRouter()
+const loginFlag = ref(false);
 
+
+onMounted(() => {
+  loginFlag.value = !!userStore.token
+})
+
+// 토큰 값이 바뀔 때마다 자동 반영
+watch(() => userStore.token, (newToken) => {
+  loginFlag.value = !!newToken
+})
+const handleClick = () => {
+  console.log(loginFlag.value);
+  if (loginFlag.value) {
+    goOops()
+  } else {
+    goLogin()
+  }
+}
 
 function goLogin() {
   router.push('/login')
+}
+
+function goOops() {
+  router.push('/oops/insertOops')
 }
 
 defineEmits(['start','open-menu'])

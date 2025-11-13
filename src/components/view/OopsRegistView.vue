@@ -6,10 +6,10 @@
     <section class="field">
       <label class="label">공개 설정</label>
       <div class="row">
-        <label class="radio">
+        <label class="radio-css">
           <input type="radio" value="N" v-model="form.oopsIsPrivate" />공개
         </label>
-        <label class="radio">
+        <label class="radio-css">
           <input type="radio" value="Y" v-model="form.oopsIsPrivate" />비공개
         </label>
       </div>
@@ -261,4 +261,64 @@ function onCancel(){ router.back() }
 .actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:18px }
 .hint{ font-size:12px; color:var(--ink); opacity:.6; margin-top:6px }
 .error{ color:#b00020; margin-top:8px }
+
+/* 성별 라디오 버튼 */
+.radio-css {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  color: #55433b;
+  margin-top: 4px;
+}
+
+/* 라벨 전체 클릭 가능 */
+.radio-css label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  position: relative;
+  user-select: none;
+}
+
+/* 기본 라디오 숨기기 */
+.radio-css input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(136, 170, 130, 0.5);
+  border-radius: 50%;
+  background-color: rgba(246, 241, 224, 0.9);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* 마우스 오버 */
+.radio-css input[type="radio"]:hover {
+  border-color: #88aa82;
+  box-shadow: 0 0 5px rgba(136, 170, 130, 0.3);
+}
+
+/* 선택 시 */
+.radio-css input[type="radio"]:checked {
+  background-color: #88aa82;
+  border-color: #88aa82;
+  box-shadow: 0 0 6px rgba(136, 170, 130, 0.4);
+}
+
+/* 선택된 원 안의 점 (checked 표시) */
+.radio-css input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%);
+}
 </style>

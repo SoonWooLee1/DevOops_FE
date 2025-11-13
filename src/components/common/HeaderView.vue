@@ -71,7 +71,7 @@
     </li>
 
     <li class="menu-item" v-if="isManager">
-      <span class="icon"><img src="/public/admin.png" alt="admin" width="18px" height="18px"></span>
+      <span class="icon"><img src="/admin.png" alt="admin" width="18px" height="18px"></span>
       <a href="/admin">관리자 페이지</a>
     </li>
 
@@ -79,6 +79,17 @@
       <span class="icon"><BellIcon /></span>
       <a href="/mypage">마이페이지</a>
     </li> -->
+
+    <div v-if="loginFlag" class="member-info-section">
+      <div class="member-row">
+        <span class="member-id-label">ID : </span>
+        <span class="member-id-value">{{ userId }}</span>
+      </div>
+      <div class="member-row">
+        <span class="member-date-label">가입일 : </span>
+        <span class="member-date-value">{{ signupDate }}</span>
+      </div>
+    </div>
 
     <template #footer>
       <blockquote class="quote">"실수는 버그가 아니라 <br> 
@@ -88,7 +99,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, ref } from 'vue'
+import { onMounted, onUpdated, ref, watch } from 'vue'
 import HamburgerButton from './HamburgerButton.vue'
 import MobileNav from './MobileNav.vue'
 import { useUserStore } from '@/stores/useUserInfo'
@@ -124,6 +135,8 @@ const userStore = useUserStore();
 const router = useRouter();
 const toastStore = useToastStore();
 const isManager = ref(false)
+const userId = userStore.memberId;
+const signupDate = userStore.signUpDate;
 const loginPage = ()=>{
   router.push('/login')
   open.value = false;
@@ -142,6 +155,7 @@ onUpdated(()=>{
   if(userStore.token)loginFlag.value=true;
   if(userStore.auth.includes('ROLE_ADMIN'))isManager.value=true;
 })
+
 </script>
 
 <style scoped>
@@ -234,4 +248,33 @@ onUpdated(()=>{
 
 /* 기본 색 */
 .icon { color: #3b2906; }
+
+.member-info-section {
+  margin-top: auto;
+  margin-bottom: 18px;
+  background: none;
+  padding: 0 18px 0 0;
+}
+
+.member-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 2px;
+  color: #928d89;
+}
+
+.member-id-label,
+.member-date-label {
+  font-weight: 500;
+  margin-right: 3px;
+  color: #97928e;
+}
+
+.member-id-value,
+.member-date-value {
+  font-weight: 500;
+}
+
 </style>
