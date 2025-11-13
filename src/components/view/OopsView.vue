@@ -1,6 +1,6 @@
-<!-- src/views/OohView.vue -->
+<!-- src/views/OopsView.vue -->
 <template>
-  <div class="ooh-view">
+  <div class="oops-view">
     <!-- 상단 -->
     <div class="top">
       <button class="back" type="button" @click="router.back()">
@@ -16,8 +16,8 @@
         + 기록 작성
       </button>
 
-      <h1 class="title">Ooh_Log</h1>
-      <p class="subtitle">작은 성취는, 함께할 때 더 반짝인다</p>
+      <h1 class="title">Oops_Log</h1>
+      <p class="subtitle">오늘의 실수로 내일의 나를 디버그하다</p>
 
       <!-- 검색바 (RecordSearchBar 재사용) -->
       <RecordSearchBar
@@ -36,7 +36,7 @@
           v-for="p in items"
           :key="p.id"
           :post="p"
-          record-type="ooh"
+          record-type="oops"
           :fetch-likes="true"
           @update:likes="val => p.likes = val"
           @click="() => goDetail(p.id)"  
@@ -62,7 +62,7 @@ import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import RecordCard from '../record/RecordCard.vue'
 import RecordSearchBar from '../record/RecordSearchBar.vue'
-import { fetchOohList } from '../api/ooh'
+import { fetchOopsList } from '../api/oops'
 import { useToastStore } from "@/stores/useToast";
 import { useUserStore } from "@/stores/useUserInfo";
 
@@ -79,15 +79,15 @@ function goWrite() {
     router.push({ name: 'Login' })
     return
   }
-  router.push({ name: 'InsertOoh' })
+  router.push({ name: 'InsertOops' })
 }
 
 function goDetail(id) {
   try {
-    router.push({ name: 'DetailOoh', params: { id: String(id) } })
+    router.push({ name: 'DetailOops', params: { id: String(id) } })
   } catch (e) {
     console.warn('라우터가 이상합니다.', e)
-    router.push({ path: `/ooh/${id}/detail` })
+    router.push({ path: `/oops/${id}/detail` })
   }
 }
 
@@ -128,9 +128,9 @@ function adaptListResponse(data) {
   if (data?.content) {
     return { list: data.content, hasNextPage: data.last === false }
   }
-  // 3) 커스텀(oohList/hasNextPage)
-  if (data?.oohList) {
-    return { list: data.oohList, hasNextPage: !!data.hasNextPage }
+  // 3) 커스텀(oopsList/hasNextPage)
+  if (data?.oopsList) {
+    return { list: data.oopsList, hasNextPage: !!data.hasNextPage }
   }
   // 4) 범용(list/items/rows)
   const list = data?.list ?? data?.items ?? data?.rows ?? []
@@ -143,11 +143,11 @@ function normalizeItem(it) {
   const pick = (...keys) => keys.find(k => it?.[k] !== undefined)
     ? it[keys.find(k => it?.[k] !== undefined)]
     : undefined
-  const id        = pick('id', 'oohId', 'ooh_id')
-  const title     = pick('oohTitle', 'title', 'ooh_title')
-  const body      = pick('oohContent', 'content', 'ooh_content', 'text', 'body')
-  const isPrivate = pick('oohIsPrivate', 'isPrivate', 'ooh_is_private') === 'Y'
-  const createdAt = pick('oohCreateDate', 'createdAt', 'createDate', 'create_time')
+  const id        = pick('id', 'oopsId', 'oops_id')
+  const title     = pick('oopsTitle', 'title', 'oops_title')
+  const body      = pick('oopsContent', 'content', 'oops_content', 'text', 'body')
+  const isPrivate = pick('oopsIsPrivate', 'isPrivate', 'oops_is_private') === 'Y'
+  const createdAt = pick('oopsCreateDate', 'createdAt', 'createDate', 'create_time')
   const name      = pick('name', 'writerName', 'authorName', 'nickname') || '익명'
   const tags      = pick('tagNames', 'tags', 'tag_names') || []
   const likes     = pick('likeCount', 'likes', 'like_count') ?? 0
@@ -163,8 +163,8 @@ async function loadNext(q = '') {
   error.value = ''
 
   try {
-    const raw = await fetchOohList({ page: page.value, size: size.value, title: q, content: q })
-    // console.log('[/ooh/all]', raw) // 필요 시 살리기
+    const raw = await fetchOopsList({ page: page.value, size: size.value, title: q, content: q })
+    // console.log('[/oops/all]', raw) // 필요 시 살리기
     const { list, hasNextPage } = adaptListResponse(raw)
     const mapped = list.map(normalizeItem)
     items.value.push(...mapped)
@@ -172,7 +172,7 @@ async function loadNext(q = '') {
     page.value += 1
   } catch (e) {
     console.error(e)
-    error.value = 'Ooh 목록을 불러오지 못했습니다.'
+    error.value = 'Oops 목록을 불러오지 못했습니다.'
   } finally {
     loading.value = false
   }
@@ -223,7 +223,7 @@ function onMeToo(p)     { console.log('meToo', p.id) }
 :root {
   --bg:#f6f1e0; --ink:#55433b; --soft:#eae4cf; --borderSoft: rgba(136,170,130,.25);
 }
-.ooh-view{
+.oops-view{
   width: 896px;
   margin: 0 auto;
   padding-top: 88px;

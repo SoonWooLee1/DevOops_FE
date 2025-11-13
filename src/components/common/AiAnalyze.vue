@@ -4,24 +4,19 @@
     <header class="head">
       <div class="head-left">
         <span class="dot-icon" aria-hidden="true"></span>
-        <h2 class="title">내용</h2>
+        <!-- 🔄 [변경] 제목을 'AI 분석'으로, 입력창은 부모에서만 -->
+        <h2 class="title">AI 분석</h2>
       </div>
     </header>
 
     <div class="divider" aria-hidden="true"></div>
 
     <section class="body">
-      <!-- 입력 -->
-      <textarea
-        v-model="content"
-        placeholder="오늘 하루의 감정을 자유롭게 표현해주세요..."
-        class="input-box"
-        rows="4"
-      ></textarea>
 
+      <!-- ✅ [유지/변경] 부모에서 온 text만 분석 -->
       <button
         @click="analyzeContent"
-        :disabled="loading || !content"
+        :disabled="loading || !text"
         class="analyze-btn"
       >
         {{ loading ? "분석 중..." : "AI 분석하기" }}
@@ -50,41 +45,37 @@
 </template>
 
 <script setup>
+// ✅ [변경] 부모에서 text를 prop으로 받는다
+const props = defineProps({
+  text: { type: String, default: '' }
+})
+
 import { ref } from 'vue'
 import axios from 'axios'
 
+// 부모에 피드백/태그를 돌려줌
 const emit = defineEmits(['aiResult'])
-const content = ref('')
+
+const loading = ref(false)
 const feedback = ref('')
 const relatedTags = ref([])
-const loading = ref(false)
 
-const analyzeContent = async () => {
-  if (!content.value.trim()) return
+async function analyzeContent () {
+  if (!props.text?.trim()) return
   loading.value = true
-
   try {
-    const response = await axios.post('/api/ai/analyze', {
-      content: content.value
-    })
+    // ✅ 부모의 text로 분석 요청
+    const { data } = await axios.post('/api/ai/analyze', { content: props.text })
+    feedback.value = data?.feedback || ''
+    relatedTags.value = Array.isArray(data?.relatedTags) ? data.relatedTags : []
 
-    feedback.value = response.data.feedback
-    relatedTags.value = response.data.relatedTags || []
-
-    emit('aiResult', {
-      content: content.value,
-      feedback: feedback.value,
-      relatedTags: relatedTags.value
-    })
-  } catch (error) {
-    console.error('AI 분석 오류:', error)
+    // ✅ 부모에 결과 전달 (저장에 사용)
+    emit('aiResult', { feedback: feedback.value, relatedTags: relatedTags.value })
+  } catch (e) {
+    console.error('AI 분석 오류:', e)
     feedback.value = 'AI 분석 중 오류가 발생했습니다.'
     relatedTags.value = []
-    emit('aiResult', {
-      content: content.value,
-      feedback: feedback.value,
-      relatedTags: []
-    })
+    emit('aiResult', { feedback: feedback.value, relatedTags: [] })
   } finally {
     loading.value = false
   }

@@ -14,41 +14,56 @@ export async function fetchOohList({ page = 1, size = 10, title = '', content = 
   return data;
 }
 
-export async function fetchOohDetail(id, commentLimit = 10) {
-  const { data } = await axios.get(`/ooh/${id}/detail`, { params: { commentLimit } })
+// 수정: 단건 상세 (토큰 optional)
+export async function fetchOohDetail(id, commentLimit = 10, token) {
+  const { data } = await api.get(`/ooh/${id}/detail`, {
+    params: { commentLimit },
+    headers: token ? { Authorization: `Bearer ${token}` } : {}        // 토큰 추가
+  })
   return data
 }
 
 
-/// ✅ Ooh 등록: 태그 + 감정태그까지 함께 전송
+
+// 등록 (일반 태그, AI 답변, 감정 태그 모두 포함)
 export async function createOoh({
   oohUserId,
   oohTitle,
   oohContent,
   oohIsPrivate = 'N',
-  tagIds = [],       // number[]
-  emoTagIds = []     // string[]
-}) {
-  const body = { oohUserId, oohTitle, oohContent, oohIsPrivate, tagIds, emoTagIds };
-  // const body = { oohUserId, oohTitle, oohContent, oohIsPrivate };
-  const { data } = await api.post('/ooh/insertOoh', body);
+  tagIds = [],
+  emoTagIds = [],
+  oohAIAnswer = null,           // ✅ 추가
+}, token) {
+  const body = { 
+    oohUserId, oohTitle, oohContent, oohIsPrivate,
+    tagIds, emoTagIds,
+    oohAIAnswer                     //  반드시 전송
+  };
+
+  // 토큰을 넘겨주고 싶을 때 옵션으로 헤더에 실어줌
+  const config = token ? { headers: { Authorization: `Bearer ${token}` } } : undefined;
+  const { data } = await api.post('/ooh/insertOoh', body, config);
   return data;
 }
 
 // 수정
 export async function updateOoh(
-  id, 
-  { 
-    oohTitle, 
+  id,
+  { oohTitle,
     oohContent, 
     oohIsPrivate = 'N', 
     tagIds = [] 
-  }) 
-{
-  const body = { oohTitle, oohContent, oohIsPrivate, tagIds };
-  const { data } = await api.put(`/ooh/updateOoh/${id}`, body);
-  return data;
+  },
+  token
+) {
+  const body = { oohTitle, oohContent, oohIsPrivate, tagIds }
+  const { data } = await api.put(`/ooh/updateOoh/${id}`, body, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  })
+  return data
 }
+
 
 // 삭제(소프트/하드)
 export async function deleteOoh(id) {
@@ -59,6 +74,3 @@ export async function hardDeleteOoh(id) {
   const { data } = await api.delete(`/ooh/hardDeleteOoh/${id}`);
   return data;
 }
-
-
-/* 태그 아이디 기록작성, 수정 할때 넣어줘야하는거 기억하기 */

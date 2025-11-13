@@ -1,16 +1,16 @@
 <template>
   <main class="wrap">
-    <h1 class="title">Ooh 기록 작성</h1>
+    <h1 class="title">Oops 기록 작성</h1>
 
     <!-- 공개/비공개 -->
     <section class="field">
       <label class="label">공개 설정</label>
       <div class="row">
         <label class="radio">
-          <input type="radio" value="N" v-model="form.oohIsPrivate" />공개
+          <input type="radio" value="N" v-model="form.oopsIsPrivate" />공개
         </label>
         <label class="radio">
-          <input type="radio" value="Y" v-model="form.oohIsPrivate" />비공개
+          <input type="radio" value="Y" v-model="form.oopsIsPrivate" />비공개
         </label>
       </div>
     </section>
@@ -18,10 +18,10 @@
     <!-- 제목 -->
     <section class="field">
       <label class="label" for="title">제목</label>
-      <input id="title" class="input" v-model.trim="form.oohTitle" placeholder="제목을 입력하세요" />
+      <input id="title" class="input" v-model.trim="form.oopsTitle" placeholder="제목을 입력하세요" />
     </section>
 
-    <!-- 태그 (ooh용, 최대 3개) -->
+    <!-- 태그 (oops용, 최대 3개) -->
     <section class="field">
       <label class="label">태그 (최대 3개)</label>
       <div class="tags">
@@ -46,15 +46,15 @@
         id="content"
         class="textarea"
         rows="8"
-        v-model.trim="form.oohContent"
+        v-model.trim="form.oopsContent"
         placeholder="오늘의 빛남을 적어보세요…"
       />
-      <div class="count">{{ (form.oohContent || '').length }}자</div>
+      <div class="count">{{ (form.oopsContent || '').length }}자</div>
     </section>
 
     <!-- AiAnalyze는 부모의 내용을 props로 받아 분석만 담당 -->
     <section class="field">
-      <AiAnalyze :text="form.oohContent" @aiResult="onAIResult" />
+      <AiAnalyze :text="form.oopsContent" @aiResult="onAIResult" />
     </section>
 
     <div class="actions">
@@ -73,8 +73,8 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/useUserInfo'
 import { useToastStore } from "@/stores/useToast";
 
-import { createOoh } from '../api/ooh'
-import { fetchOohTagOptions } from '../api/tag'
+import { createOops } from '../api/oops'
+import { fetchOopsTagOptions } from '../api/tag'
 import AiAnalyze from '../common/AiAnalyze.vue';
 
 
@@ -88,9 +88,9 @@ const currentUserId = computed(() => Number(userStore.id || 0))
 
 /* 폼 데이터: 내용/제목/공개여부/AI답변 */
 const form = reactive({
-  oohIsPrivate: 'N',
-  oohTitle: '',
-  oohContent: '',
+  oopsIsPrivate: 'N',
+  oopsTitle: '',
+  oopsContent: '',
   aiAnswer: '',          // 🔸 AiAnalyze 결과를 저장
 })
 
@@ -103,7 +103,7 @@ const busy = ref(false)
 // 태그 로드
 onMounted(async () => {
   try {
-    tagOptions.value = await fetchOohTagOptions()
+    tagOptions.value = await fetchOopsTagOptions()
   } catch {
     toastStore.showToast("태그를 불러오지 못했습니다.")
   }
@@ -112,7 +112,7 @@ onMounted(async () => {
 // 태그 옵션 로드
 onMounted(async () => {
   try {
-    tagOptions.value = await fetchOohTagOptions()
+    tagOptions.value = await fetchOopsTagOptions()
   } catch {
     toastStore.showToast("태그를 불러오지 못했습니다.")
   }
@@ -133,23 +133,23 @@ function toggleTag(tagId) {
 // 유효성
 function validate() {
   if 
-  (!form.oohTitle) 
+  (!form.oopsTitle) 
   return toastStore.showToast('제목은 필수입니다.')
   if 
-  (!form.oohContent) 
+  (!form.oopsContent) 
   return toastStore.showToast('내용은 필수입니다.')
   if 
   (selectedTagIds.value.length > 3) 
   return toastStore.showToast('태그는 최대 3개까지만 선택 가능합니다.')
   if 
-  (form.oohIsPrivate !== 'Y' && form.oohIsPrivate !== 'N') 
+  (form.oopsIsPrivate !== 'Y' && form.oopsIsPrivate !== 'N') 
   return toastStore.showToast('공개 설정 값이 올바르지 않습니다.')
   return ''
 }
 
 /* ✅ AiAnalyze 결과 수신: 부모의 form에 반영 */
 function onAIResult({ feedback, relatedTags }){
-  form.aiAnswer = feedback || ''                         // 🔸 DB 필드 oohAIAnswer로 저장됨
+  form.aiAnswer = feedback || ''                         // 🔸 DB 필드 oopsAIAnswer로 저장됨
   aiEmoTagNames.value = Array.isArray(relatedTags) ? relatedTags : []
   toastStore.showToast('AI 피드백이 반영되었습니다.')
 }
@@ -157,7 +157,7 @@ function onAIResult({ feedback, relatedTags }){
 // (A) 부모에서 직접 AI 호출(자식 컴포넌트 호출 없이도 동작)
 async function requestAI() {
   try {
-    const { data } = await axios.post('/api/ai/analyze', { content: form.oohContent })
+    const { data } = await axios.post('/api/ai/analyze', { content: form.oopsContent })
     form.aiAnswer = data?.feedback || ''
     aiEmoTagNames.value = Array.isArray(data?.relatedTags) ? data.relatedTags : []
   } catch (e) {
@@ -195,19 +195,19 @@ async function submit(){
   busy.value = true
   try {
     // ✅ 백엔드 계약에 맞춰 payload 구성
-    const saved = await createOoh({
-      oohUserId: currentUserId.value,
-      oohTitle: form.oohTitle,
-      oohContent: form.oohContent,
-      oohIsPrivate: form.oohIsPrivate,
+    const saved = await createOops({
+      oopsUserId: currentUserId.value,
+      oopsTitle: form.oopsTitle,
+      oopsContent: form.oopsContent,
+      oopsIsPrivate: form.oopsIsPrivate,
       tagIds: selectedTagIds.value.map(Number),  // 일반 태그 id[]
       emoTagIds: aiEmoTagNames.value,            // 감정 태그 "이름" 배열 (백엔드가 id로 매핑)
-      oohAIAnswer: form.aiAnswer || null         // ✅ AI 피드백 본문
+      oopsAIAnswer: form.aiAnswer || null         // ✅ AI 피드백 본문
     }, token)
 
     toastStore.showToast('등록 완료!')
-    if (saved?.oohId) router.push({ path: `/ooh/${saved.oohId}/detail` })
-    else router.push({ name: 'Ooh' })
+    if (saved?.oopsId) router.push({ path: `/oops/${saved.oopsId}/detail` })
+    else router.push({ name: 'Oops' })
   } catch (e) {
     console.error(e)
     toastStore.showToast(e?.response?.data?.message || e?.response?.data?.error || '등록에 실패했습니다.')

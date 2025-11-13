@@ -4,12 +4,12 @@
       <span class="arrow">←</span> 돌아가기
     </button>
 
-    <div class="card" v-if="ooh">
+    <div class="card" v-if="oops">
       <header class="card-header">
         <div class="author">
           <div class="avatar-badge">{{ avatarInitial }}</div>
           <div class="meta">
-            <div class="name">{{ ooh.userName }}</div>
+            <div class="name">{{ oops.userName }}</div>
             <div class="date">{{ formattedDate }}</div>
           </div>
         </div>
@@ -26,8 +26,8 @@
       </header>
 
       <section class="card-body">
-        <h1 class="title">{{ ooh.title }}</h1>
-        <p class="content" v-if="ooh.content">{{ ooh.content }}</p>
+        <h1 class="title">{{ oops.title }}</h1>
+        <p class="content" v-if="oops.content">{{ oops.content }}</p>
 
                 <!-- AI 답변 -->
         <div class="ai-answer" v-if="aiAnswer">
@@ -64,12 +64,12 @@
 
     <!-- 댓글 컴포넌트 -->
     <section v-if="USE_NOTICE_COMMENTS" class="comments">
-      <OohComments
-        v-if="ooh"
-        :ooh-id="ooh.id"
-        :initial-comments="ooh.comments"
-        @update:list="(l) => { if(ooh){ ooh.comments = l } }"
-        @update:count="(n) => { if(ooh){ ooh.commentsTotal = n } }"
+      <OopsComments
+        v-if="oops"
+        :oops-id="oops.id"
+        :initial-comments="oops.comments"
+        @update:list="(l) => { if(oops){ oops.comments = l } }"
+        @update:count="(n) => { if(oops){ oops.commentsTotal = n } }"
       />
     </section>
 
@@ -83,10 +83,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../api/client'
-import OohComments from '../record/OohComments.vue'
+import OopsComments from '../record/OopsComments.vue'
 import { useToastStore } from "@/stores/useToast";
 import { useUserStore } from "@/stores/useUserInfo"; 
-import { pushOohLikes, checkOohLikesExist } from '../api/likes'
+import { pushOopsLikes, checkOopsLikesExist } from '../api/likes'
 
 const toastStore = useToastStore();
 const userStore  = useUserStore(); 
@@ -99,7 +99,7 @@ const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
-const ooh = ref(null)
+const oops = ref(null)
 
 const likesCount = ref(0)
 const likedByMe  = ref(false)
@@ -112,11 +112,11 @@ const editContent    = ref('')
 // ✅ 현재 로그인한 유저 ID
 const currentUserId = computed(() => Number(userStore.id || 0))
 //AI 답변
-const aiAnswer = computed(() => ooh.value?.aiAnswer ?? ooh.value?.ai_answer ?? '')
+const aiAnswer = computed(() => oops.value?.aiAnswer ?? oops.value?.ai_answer ?? '')
 // ✅ 태그 배열: ["목표달성"] 또는 [{tagName:"목표달성"}] 모두 허용
 
 const normalizedTags = computed(() => {
-  const src = ooh.value?.tags ?? []
+  const src = oops.value?.tags ?? []
   if (!Array.isArray(src)) return []
   return src
     .map(t => typeof t === 'string'
@@ -127,7 +127,7 @@ const normalizedTags = computed(() => {
 
 // ✅ 감정 배열: ["기쁨"] 또는 [{name:"기쁨"}] 모두 허용
 const normalizedEmotions = computed(() => {
-  const src = ooh.value?.emotions ?? ooh.value?.emo ?? ooh.value?.emotionList ?? []
+  const src = oops.value?.emotions ?? oops.value?.emo ?? oops.value?.emotionList ?? []
   if (!Array.isArray(src)) return []
   return src
     .map(e => typeof e === 'string' ? e : (e.name ?? e.value ?? ''))
@@ -135,9 +135,9 @@ const normalizedEmotions = computed(() => {
 })
 
 
-// ✅ 내 글인지 여부: 글의 작성자(ooh.userId)와 현재 사용자 비교
+// ✅ 내 글인지 여부: 글의 작성자(oops.userId)와 현재 사용자 비교
 const isMine = computed(() => {
-  const postOwner = Number(ooh.value?.userId || 0)
+  const postOwner = Number(oops.value?.userId || 0)
   return postOwner > 0 && currentUserId.value > 0 && postOwner === currentUserId.value
 })
 
@@ -160,16 +160,16 @@ const isAdmin = computed(() => {
 // ✅ 수정/삭제 가능 조건: 내 글이거나 관리자
 const canManage = computed(() => isMine.value || isAdmin.value)
 
-const goList = () => router.push({ name: 'Ooh' })
+const goList = () => router.push({ name: 'Oops' })
 const typeLabel = computed(() => {
-  if (!ooh.value?.type) return ''
-  const t = String(ooh.value.type)
+  if (!oops.value?.type) return ''
+  const t = String(oops.value.type)
   return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase()
 })
 
-const formattedDate = computed(() => ooh.value?.createDate ? formatDate(ooh.value.createDate) : '')
-const avatarInitial = computed(() => ooh.value?.userName ? ooh.value.userName[0] : '유')
-const totalComments = computed(() => ooh.value?.commentsTotal ?? (ooh.value?.comments?.length || 0))
+const formattedDate = computed(() => oops.value?.createDate ? formatDate(oops.value.createDate) : '')
+const avatarInitial = computed(() => oops.value?.userName ? oops.value.userName[0] : '유')
+const totalComments = computed(() => oops.value?.commentsTotal ?? (oops.value?.comments?.length || 0))
 
 
 function formatDate(iso) {
@@ -187,7 +187,7 @@ function formatDate(iso) {
 
 async function checkLikeExist() {
   try {
-    const response = await checkOohLikesExist(ooh.value.id, token);
+    const response = await checkOopsLikesExist(oops.value.id, token);
     if (response == "exist") {
                 likedByMe.value = true;
             } else {
@@ -204,21 +204,21 @@ onMounted(async () => {
   const id = route.params.id
   loading.value = true
   try {
-    const detail = await api.get(`/ooh/${id}/detail`)
+    const detail = await api.get(`/oops/${id}/detail`)
     const raw = detail.data || {}
 
     // ✅ 작성자/닉네임 정규화
-    raw.userId   = raw.userId ?? raw.oohUserId ?? raw.writerId ?? 0
+    raw.userId   = raw.userId ?? raw.oopsUserId ?? raw.writerId ?? 0
     raw.userName = raw.userName ?? raw.writerName ?? raw.nickname ?? '익명'
 
     // ✅ AI 답변 정규화 (DDL: ai_answer → 프론트: aiAnswer)
     raw.aiAnswer = raw.aiAnswer ?? raw.ai_answer ?? raw.aiFeedback ?? raw.ai_feedback ?? raw.aiComment ?? raw.ai_comment ?? ''
 
-    ooh.value = raw
+    oops.value = raw
 
-    if (!Array.isArray(ooh.value.comments)) {
-      ooh.value.comments = []
-      ooh.value.commentsTotal = 0
+    if (!Array.isArray(oops.value.comments)) {
+      oops.value.comments = []
+      oops.value.commentsTotal = 0
     }
 
     await tryFetchComments()
@@ -233,49 +233,49 @@ onMounted(async () => {
 })
 
 async function tryFetchComments() {
-  const oohId = ooh.value.id
+  const oopsId = oops.value.id
   try {
-    const res = await api.get(`/comments/ooh-read/${oohId}`)
+    const res = await api.get(`/comments/oops-read/${oopsId}`)
     const fromApi = Array.isArray(res.data)
       ? res.data
       : (Array.isArray(res.data?.comments) ? res.data.comments : null)
 
     if (Array.isArray(fromApi)) {
-      ooh.value.comments = fromApi
-      ooh.value.commentsTotal = fromApi.length
+      oops.value.comments = fromApi
+      oops.value.commentsTotal = fromApi.length
     } else {
-      ooh.value.comments = Array.isArray(ooh.value.comments) ? ooh.value.comments : []
-      ooh.value.commentsTotal = ooh.value.comments.length
+      oops.value.comments = Array.isArray(oops.value.comments) ? oops.value.comments : []
+      oops.value.commentsTotal = oops.value.comments.length
     }
   } catch (err) {
     toastStore.showToast('[댓글 조회 실패 - detail.comments 사용]')
-    ooh.value.comments = Array.isArray(ooh.value.comments) ? ooh.value.comments : []
-    ooh.value.commentsTotal = ooh.value.comments.length
+    oops.value.comments = Array.isArray(oops.value.comments) ? oops.value.comments : []
+    oops.value.commentsTotal = oops.value.comments.length
   }
 }
 
 async function fetchLikesCount() {
-  const oohId = ooh.value.id
+  const oopsId = oops.value.id
   try {
-    const res = await api.get(`/likes/${oohId}/oohlikes-count`)
+    const res = await api.get(`/likes/${oopsId}/oopslikes-count`)
     likesCount.value = typeof res.data === 'number' ? res.data : (res.data?.count ?? 0)
   } catch (err) {
     console.warn('[좋아요 수 조회 실패]', err)
     toastStore.showToast('좋아요 수 조회에 실패했습니다.') 
-    likesCount.value = ooh.value?.likesCount ?? 0
+    likesCount.value = oops.value?.likesCount ?? 0
   }
 }
 
 async function toggleLike() {
-  const userId = ooh.value.userId
-  console.log("좋아요를 위한 ooh기록자 ID:", userId)
+  const userId = oops.value.userId
+  console.log("좋아요를 위한 oops기록자 ID:", userId)
   console.log("토큰:", token);
   console.log("로그인사용자:", userStore.id);
   if (!userId) 
     return toastStore.showToast('로그인이 필요합니다.')
   if (userStore.id == userId) return toastStore.showToast('본인의 기록에는 좋아요를 누를 수 없습니다.')
   try {
-    const response = await pushOohLikes(ooh.value.id, token);
+    const response = await pushOopsLikes(oops.value.id, token);
 
     console.log("response:", response);
     if (response == "likes created") {
@@ -295,20 +295,20 @@ async function toggleLike() {
    [POST ACTIONS] 수정/삭제
    ========================= */
 function onEdit() {
-  if (!ooh.value?.id) return
-  // 라우트 이름은 프로젝트에 맞게: 'OohEdit' 가정
-  router.push({ name: 'UpdateOoh', params: { id: ooh.value.id } })
+  if (!oops.value?.id) return
+  // 라우트 이름은 프로젝트에 맞게: 'OopsEdit' 가정
+  router.push({ name: 'UpdateOops', params: { id: oops.value.id } })
 }
 
 async function onDelete() {
-  if (!ooh.value?.id) return
+  if (!oops.value?.id) return
   if (!confirm('정말 이 글을 삭제하시겠어요?\n삭제 후에는 되돌릴 수 없습니다.')) return
   try {
-    await api.delete(`/ooh/hardDeleteOoh/${ooh.value.id}`) // 하드 딜리트
+    await api.delete(`/oops/hardDeleteOops/${oops.value.id}`) // 하드 딜리트
     toastStore.showToast('삭제되었습니다.')
     goList()
   } catch (e) {
-    console.error('[Ooh 삭제 실패]', e?.response?.status, e?.response?.data || e)
+    console.error('[Oops 삭제 실패]', e?.response?.status, e?.response?.data || e)
     toastStore.showToast('삭제에 실패했습니다. 콘솔을 확인해주세요.')
   }
 }

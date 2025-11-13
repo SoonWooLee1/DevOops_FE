@@ -54,12 +54,11 @@ const feed = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
 const userStore = useUserStore() // 스토어 사용 
-// const userId = computed(() => userStore.id) // 스토어에서 userId 가져오기 (주석 처리)
 
 const fetchFeed = async () => {
   isLoading.value = true;
 
-  // ✅ [수정] 토큰 유무도 함께 체크
+  // 토큰 유무도 함께 체크
   if (!userStore.id || !userStore.token) {
     isLoading.value = false
     feed.value = []
@@ -68,7 +67,7 @@ const fetchFeed = async () => {
   }
   
   try {
-    // ✅ [수정] axios.get 호출에 headers 객체를 추가하여 토큰 주입
+    // axios.get 호출에 headers 객체를 추가하여 토큰 주입
     const res = await axios.get(`/api/follow/feed/my`, {
       headers: {
         'Authorization': `Bearer ${userStore.token}`

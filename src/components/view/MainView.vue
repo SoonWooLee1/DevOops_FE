@@ -155,7 +155,7 @@ onUnmounted(() => {
   justify-items: center;
   align-content: center;
   gap: 30px;
-  padding: 120px 0 32px;    /* ✅ 약간의 상하 여백만 (큰 margin/translate 제거) */
+  padding: 180px 0 32px;    /* ✅ 약간의 상하 여백만 (큰 margin/translate 제거) */
 }
 
 /* ✅ (유지) 고정 높이 래퍼: 줄 전환 시 점프 방지 */

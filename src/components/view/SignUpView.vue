@@ -145,6 +145,7 @@ const handleSubmit = async () => {
       gender:gender.value
     })
     console.log("axios 통신 완료");
+    router.push('/login')
     toastStore.showToast("환영합니다! 당신의 서재가 준비되었습니다");
     router.push('/')
   } catch (error) {

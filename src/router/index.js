@@ -12,14 +12,13 @@ import ContactView from '../components/view/ContactView.vue';
 import NoticeView from '../components/view/NoticeView.vue';
 import NoticeRegistView from '../components/view/NoticeRegistView.vue';
 import NoticeEditView from '../components/view/NoticeEditView.vue';
-// import OopsView from '../components/view/OopsView.vue'
-// import OopsEditView from '../components/view/OopsEditView.vue';
-// import OopsRegistView from '../components/view/OopsRegistView.vue';
-// import OopsDetailView from '../components/view/OopsDetailView.vue';
+import OopsView from '../components/view/OopsView.vue'
+import OopsEditView from '../components/view/OopsEditView.vue';
+import OopsRegistView from '../components/view/OopsRegistView.vue';
+import OopsDetailView from '../components/view/OopsDetailView.vue';
 import OohView from '../components/view/OohView.vue'
 import OohEditView from '../components/view/OohEditView.vue';
 import OohRegistView from '../components/view/OohRegistView.vue';
-
 import OohDetailView from '../components/view/OohDetailView.vue';
 
 
@@ -78,26 +77,27 @@ const router = createRouter({
       name: 'UpdateNotice',
       component: NoticeEditView
     },
-    // { 
-    //   path: '/oops',
-    //   name: 'Oops',
-    //   component: OopsView,
-    // },
-    // { 
-    //   path: '/oops/insertOops',
-    //   name: 'InsertOops',
-    //   component: OopsRegistView,
-    // },
-    // { 
-    //   path: '/oops/updateOops/:id',
-    //   name: 'UpdateOops',
-    //   component: OopsEditView,
-    // },
-    // { 
-    //   path: '/oops/:id',
-    //   name: 'DetailOops',
-    //   component: OopsDetailView,
-    // },
+    { 
+      path: '/oops',
+      name: 'Oops',
+      component: OopsView,
+    },
+    { 
+      path: '/oops/insertOops',
+      name: 'InsertOops',
+      component: OopsRegistView,
+    },
+    { 
+      path: '/oops/updateOops/:id',
+      name: 'UpdateOops',
+      component: OopsEditView,
+    },
+    { 
+      path: '/oops/:id/detail',
+      name: 'DetailOops',
+      component: OopsDetailView,
+      props: true,
+    },
     { 
       path: '/ooh',
       name: 'Ooh',

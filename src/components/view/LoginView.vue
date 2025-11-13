@@ -81,6 +81,7 @@ const findPw = () => {
           type="text"
           v-model="username"
           placeholder="아이디를 입력하세요"
+          @keyup.enter.stop="handleLogin"
         />
       </div>
 
@@ -90,7 +91,8 @@ const findPw = () => {
           id="password"
           type="password"
           v-model="password"
-          placeholder="비밀번호를 입력하세요"
+          placeholder="비밀번호를 입력하세요" 
+          @keyup.enter.stop="handleLogin"
         />
       </div>
 

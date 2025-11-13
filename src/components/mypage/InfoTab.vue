@@ -62,9 +62,11 @@ const save = async () => {
       }
     }
   )
-  toastStore.showToast("회원 정보 수정이 완료되었습니다.");
+  userStore.memberId = memberId.value;
+  userStore.email = email.value;
   password.value = '';
   confirmPassword.value = '';
+  toastStore.showToast("회원 정보 수정이 완료되었습니다.");
   } catch (error) {
     toastStore.showToast("중복된 아이디 혹은 이메일이 존재합니다.");
   }

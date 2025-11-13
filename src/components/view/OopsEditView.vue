@@ -1,4 +1,4 @@
-<!-- src/views/OohEditView.vue -->
+<!-- src/views/OopsEditView.vue -->
 <template>
   <div class="page">
     <button class="back-link" type="button" @click="goBack">
@@ -65,8 +65,8 @@ import { useToastStore } from '@/stores/useToast'
 import { useUserStore } from '@/stores/useUserInfo'
 
 // API
-import { fetchOohDetail, updateOoh } from '../api/ooh'
-import { fetchOohTagOptions } from '../api/tag'
+import { fetchOopsDetail, updateOops } from '../api/oops'
+import { fetchOopsTagOptions } from '../api/tag'
 
 // route/store
 const route = useRoute()
@@ -99,9 +99,9 @@ function goBack(){ router.back() }
 // 상세 → 화면 바인딩
 function normalizeDetail(d){
   return {
-    title: d?.title ?? d?.oohTitle ?? '',
-    content: d?.content ?? d?.oohContent ?? '',
-    isPrivate: (d?.isPrivate ?? d?.is_private ?? d?.oohIsPrivate ?? 'N'),
+    title: d?.title ?? d?.oopsTitle ?? '',
+    content: d?.content ?? d?.oopsContent ?? '',
+    isPrivate: (d?.isPrivate ?? d?.is_private ?? d?.oopsIsPrivate ?? 'N'),
      // 백엔드가 ["피드백","협업"] 으로 주는 형태 가정
     tagsByName: Array.isArray(d?.tags) ? d.tags :
                 Array.isArray(d?.tagNames) ? d.tagNames : []
@@ -123,8 +123,8 @@ onMounted(async () => {
   error.value = ''
   try {
     const [detail, options] = await Promise.all([
-      fetchOohDetail(id.value, 10, token),
-      fetchOohTagOptions()
+      fetchOopsDetail(id.value, 10, token),
+      fetchOopsTagOptions()
     ])
     tagOptions.value = options
 
@@ -155,18 +155,18 @@ async function onSubmit(){
 
   submitting.value = true
   try {
-    await updateOoh(
+    await updateOops(
       id.value,
       {
-        oohTitle: form.value.title,
-        oohContent: form.value.content,
-        oohIsPrivate: form.value.isPrivate,
+        oopsTitle: form.value.title,
+        oopsContent: form.value.content,
+        oopsIsPrivate: form.value.isPrivate,
         tagIds: selectedTagIds.value.map(Number)
       },
       token // ← 헤더로 전달
     )
     toast.showToast('수정되었습니다.')
-    router.push({ name: 'DetailOoh', params: { id: id.value } })
+    router.push({ name: 'DetailOops', params: { id: id.value } })
   } catch (e) {
     console.error('[저장 실패]', e?.response?.status, e?.response?.data || e)
     toast.showToast('수정에 실패했습니다.')

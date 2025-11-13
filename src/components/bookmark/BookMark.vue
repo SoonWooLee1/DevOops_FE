@@ -63,7 +63,7 @@ const userStore = useUserStore();
 const fetchBookmarks = async () => {
   isLoading.value = true
 
-  // ✅ [수정] 토큰 유무도 함께 체크
+  // 토큰 유무도 함께 체크
   if (!userStore.id || !userStore.token) {
     console.log('로그인되지 않은 사용자입니다.');
     bookmarks.value = [];
@@ -72,7 +72,7 @@ const fetchBookmarks = async () => {
   }
 
   try {
-    // ✅ [수정] axios.get 호출에 headers 객체를 추가하여 토큰 주입
+    // axios.get 호출에 headers 객체를 추가하여 토큰 주입
     const res = await axios.get(`/api/bookmarks/my`, {
       headers: {
         'Authorization': `Bearer ${userStore.token}`
