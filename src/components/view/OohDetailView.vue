@@ -12,6 +12,13 @@
             <div class="name">{{ ooh.userName }}</div>
             <div class="date">{{ formattedDate }}</div>
           </div>
+          <button 
+            v-if="!isMine && currentUserId" 
+            class="btn follow-btn" 
+            @click.stop="toggleFollow" 
+            :disabled="followCheckLoading">
+            {{ isFollowing ? '언팔로우' : '팔로우' }}
+          </button>
         </div>
 
         
@@ -59,6 +66,14 @@
         <div class="count"><span class="icon">좋아요</span> {{ likesCount }}</div>
         <div class="dot">•</div>
         <div class="count"><span class="icon">댓글</span> {{ totalComments }}</div>
+        <div class="dot" v-if="currentUserId">•</div>
+        <button 
+          class="btn-footer" 
+          @click.stop="toggleBookmark" 
+          :disabled="bookmarkCheckLoading"
+          v-if="currentUserId">
+          {{ isBookmarked ? '북마크 됨' : '북마크' }}
+        </button>
       </footer>
     </div>
 
@@ -87,6 +102,8 @@ import OohComments from '../record/OohComments.vue'
 import { useToastStore } from "@/stores/useToast";
 import { useUserStore } from "@/stores/useUserInfo"; 
 import { pushOohLikes, checkOohLikesExist } from '../api/likes'
+import { addBookmark, removeBookmark, fetchMyBookmarks } from '../api/bookmarks'
+import { followUser, unfollowUser, fetchMyFollowing } from '../api/follow'
 
 const toastStore = useToastStore();
 const userStore  = useUserStore(); 
@@ -103,6 +120,11 @@ const ooh = ref(null)
 
 const likesCount = ref(0)
 const likedByMe  = ref(false)
+
+const isBookmarked = ref(false);
+const isFollowing = ref(false);
+const bookmarkCheckLoading = ref(true);
+const followCheckLoading = ref(true);
 
 const newComment     = ref('')
 const editCommentId  = ref(null)
@@ -224,6 +246,9 @@ onMounted(async () => {
     await tryFetchComments()
     await fetchLikesCount()
     checkLikeExist();
+    // 북마크/팔로우 상태 체크
+    await checkInitialStates();
+
   } catch (e) {
     console.error(e)
     toastStore.showToast('데이터를 불러오지 못했습니다.')
@@ -313,6 +338,90 @@ async function onDelete() {
   }
 }
 
+// 북마크/팔로우 초기 상태 확인
+async function checkInitialStates() {
+  if (!token || !ooh.value) return;
+  
+  const oohId = ooh.value.id;
+  const authorId = ooh.value.userId;
+
+  // 1. 북마크 상태 확인
+  bookmarkCheckLoading.value = true;
+  try {
+    const myBookmarks = await fetchMyBookmarks(token);
+    isBookmarked.value = myBookmarks.some(b => b.recordType === 'ooh' && b.recordId === oohId);
+  } catch (e) {
+    console.error('Bookmark check failed', e);
+  } finally {
+    bookmarkCheckLoading.value = false;
+  }
+
+  // 2. 팔로우 상태 확인 (자신이 아닌 경우에만)
+  if (!isMine.value) {
+    followCheckLoading.value = true;
+    try {
+      const myFollowing = await fetchMyFollowing(token);
+      isFollowing.value = myFollowing.some(f => f.id === authorId);
+    } catch (e) {
+      console.error('Follow check failed', e);
+    } finally {
+      followCheckLoading.value = false;
+    }
+  } else {
+    followCheckLoading.value = false;
+  }
+}
+
+// 북마크 토글
+async function toggleBookmark() {
+  if (bookmarkCheckLoading.value) return;
+  if (!token) return toastStore.showToast('로그인이 필요합니다.');
+  if (isMine.value) return toastStore.showToast('자신의 글은 북마크할 수 없습니다.');
+
+  bookmarkCheckLoading.value = true;
+  try {
+    if (isBookmarked.value) {
+      await removeBookmark('ooh', ooh.value.id, token);
+      isBookmarked.value = false;
+      toastStore.showToast('북마크에서 삭제했습니다.');
+    } else {
+      await addBookmark('ooh', ooh.value.id, token);
+      isBookmarked.value = true;
+      toastStore.showToast('북마크에 추가했습니다.');
+    }
+  } catch (e) {
+    console.error('Bookmark toggle failed', e);
+    toastStore.showToast('북마크 처리에 실패했습니다.');
+  } finally {
+    bookmarkCheckLoading.value = false;
+  }
+}
+
+// 팔로우 토글
+async function toggleFollow() {
+  const authorId = ooh.value?.userId;
+  if (followCheckLoading.value) return;
+  if (!authorId || !token) return toastStore.showToast('로그인이 필요합니다.');
+  if (isMine.value) return toastStore.showToast('자신을 팔로우할 수 없습니다.');
+
+  followCheckLoading.value = true;
+  try {
+    if (isFollowing.value) {
+      await unfollowUser(authorId, token);
+      isFollowing.value = false;
+      toastStore.showToast('언팔로우했습니다.');
+    } else {
+      await followUser(authorId, token);
+      isFollowing.value = true;
+      toastStore.showToast('팔로우했습니다.');
+    }
+  } catch (e) {
+    console.error('Follow toggle failed', e);
+    toastStore.showToast('팔로우 처리에 실패했습니다.');
+  } finally {
+    followCheckLoading.value = false;
+  }
+}
 
 </script>
 
@@ -449,4 +558,30 @@ async function onDelete() {
   line-height:1.8;
   font-size:14.5px;
 }
+.follow-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid #bfd7bc;
+  background: #e6f2e4;
+  color: #355c33;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.follow-btn:hover { background: #d6e2d4; }
+.follow-btn:disabled { opacity: 0.5; }
+
+/* ✅ 북마크 버튼 CSS */
+.btn-footer {
+  background: none;
+  border: none;
+  color: #6f6758;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+}
+.btn-footer:hover { text-decoration: underline; }
+.btn-footer:disabled { opacity: 0.5; }
+
 </style>

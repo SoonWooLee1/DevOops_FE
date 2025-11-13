@@ -28,16 +28,22 @@
       <div class="card-list">
         <BookmarkCard
           v-for="item in filteredFeed"
-          :key="item.recordType + item.recordId"
+          :key="item.recordType + '-' + item.recordId"
           :bookmark="item" 
+          @click="navigateToDetail(item)"
+          style="cursor: pointer;"
         />
         
         <div v-if="isLoading" class="loading-text">
           피드를 불러오는 중입니다...
         </div>
         
-        <div v-if="!isLoading && filteredFeed.length === 0" class="no-data">
+        <div v-if="!isLoading && feed.length === 0" class="no-data">
           팔로우한 사용자의 글이 없습니다.
+        </div>
+
+        <div v-if="!isLoading && feed.length > 0 && filteredFeed.length === 0" class="no-data">
+          검색 결과가 없습니다.
         </div>
       </div>
     </section>
@@ -46,62 +52,71 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
-import BookmarkCard from '../bookmark/BookMarkCard.vue'
-import { useUserStore } from '@/stores/useUserInfo'     // 유저 스토어 임포트
+import BookmarkCard from '../bookmark/BookMarkCard.vue' // 북마크 카드 재사용
+import { useUserStore } from '@/stores/useUserInfo'
+import { fetchMyFollowFeed } from '../api/follow' // ✅ 팔로우 피드 API
+import { useRouter } from 'vue-router'
+import { useToastStore } from '@/stores/useToast';
 
 const feed = ref([])
 const isLoading = ref(true)
 const searchQuery = ref('')
-const userStore = useUserStore() // 스토어 사용 
+const userStore = useUserStore()
+const router = useRouter()
+const toastStore = useToastStore();
 
 const fetchFeed = async () => {
   isLoading.value = true;
 
-  // 토큰 유무도 함께 체크
   if (!userStore.id || !userStore.token) {
-    isLoading.value = false
-    feed.value = []
-    console.error('로그인 정보가 없습니다.')
-    return
+    console.error('로그인 정보가 없습니다.');
+    toastStore.showToast('팔로우 피드를 보려면 로그인이 필요합니다.');
+    feed.value = [];
+    isLoading.value = false;
+    return;
   }
   
   try {
-    // axios.get 호출에 headers 객체를 추가하여 토큰 주입
-    const res = await axios.get(`/api/follow/feed/my`, {
-      headers: {
-        'Authorization': `Bearer ${userStore.token}`
-      }
-    }) 
-    feed.value = res.data // DTO 배열을 feed ref에 저장
+    const data = await fetchMyFollowFeed(userStore.token);
+    feed.value = data; // DTO 배열을 feed ref에 저장
   } catch (err) {
-    console.error('팔로우 피드를 불러오는 중 오류 발생:', err)
-    feed.value = [] // 오류 발생 시 초기화
+    console.error('팔로우 피드를 불러오는 중 오류 발생:', err);
+    toastStore.showToast('팔로우 피드를 불러오는데 실패했습니다.');
+    feed.value = []; // 오류 발생 시 초기화
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
 }
 
-// 검색어 기반 필터링 (클라이언트 사이드)
+// 검색어 기반 필터링
 const filteredFeed = computed(() => {
   if (!searchQuery.value) {
-    return feed.value
+    return feed.value;
   }
-  const query = searchQuery.value.toLowerCase()
-  // DTO 필드 기준으로 검색
+  const query = searchQuery.value.toLowerCase();
   return feed.value.filter(item =>
     item.title?.toLowerCase().includes(query) ||
     item.contentSnippet?.toLowerCase().includes(query) ||
     item.authorName?.toLowerCase().includes(query)
-  )
-})
+  );
+});
 
-// 컴포넌트 마운트 시 데이터 로드
-onMounted(fetchFeed)
+// 카드 클릭 시 네비게이션
+function navigateToDetail(item) {
+  const { recordType, recordId } = item;
+  if (recordType === 'ooh') {
+    router.push({ name: 'DetailOoh', params: { id: recordId } });
+  } else if (recordType === 'oops') {
+    // router.push({ name: 'DetailOops', params: { id: recordId } });
+    toastStore.showToast('Oops 상세 페이지는 현재 준비 중입니다.');
+  }
+}
+
+onMounted(fetchFeed);
 </script>
 
 <style scoped>
-
+/* BookMark.vue와 동일한 스타일을 사용합니다. */
 .follow-canvas {
   position: relative;
   min-height: 100%;
@@ -113,7 +128,6 @@ onMounted(fetchFeed)
   padding: 40px 16px;
   padding-bottom: 60px;
 }
-
 .follow-hero {
   position: relative;
   z-index: 2;
@@ -126,7 +140,6 @@ onMounted(fetchFeed)
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
   padding: 40px 32px 60px;
 }
-
 .title-block {
   text-align: center;
   margin-bottom: 28px;
@@ -142,7 +155,6 @@ onMounted(fetchFeed)
   font-size: 0.9rem;
   letter-spacing: 0.04em;
 }
-
 .search-wrapper {
   margin-bottom: 24px;
 }
@@ -164,13 +176,11 @@ onMounted(fetchFeed)
   border-color: rgba(136, 170, 130, 0.7);
   box-shadow: 0 0 0 3px rgba(136, 170, 130, 0.15);
 }
-
 .card-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
 }
-
 .no-data, .loading-text {
   text-align: center;
   color: rgba(60, 60, 60, 0.5);
@@ -178,7 +188,6 @@ onMounted(fetchFeed)
   font-size: 1rem;
   grid-column: 1 / -1;
 }
-
 .ink-bg {
   position: absolute;
   inset: 0;
@@ -212,7 +221,6 @@ onMounted(fetchFeed)
   opacity: 0.03;
   z-index: 0;
 }
-
 @keyframes fade-in-soft {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -224,9 +232,5 @@ onMounted(fetchFeed)
 @keyframes breatheB {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.08); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ink-a, .ink-b { animation: none; }
 }
 </style>
