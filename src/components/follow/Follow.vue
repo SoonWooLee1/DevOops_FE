@@ -107,7 +107,7 @@ function navigateToDetail(item) {
   if (recordType === 'ooh') {
     router.push({ name: 'DetailOoh', params: { id: recordId } });
   } else if (recordType === 'oops') {
-    // router.push({ name: 'DetailOops', params: { id: recordId } });
+    router.push({ name: 'DetailOops', params: { id: recordId } });
     toastStore.showToast('Oops 상세 페이지는 현재 준비 중입니다.');
   }
 }

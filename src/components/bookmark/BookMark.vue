@@ -109,8 +109,8 @@ function navigateToDetail(bookmark) {
     router.push({ name: 'DetailOoh', params: { id: recordId } });
   } else if (recordType === 'oops') {
     // 참고: router/index.js 에는 Oops 상세 페이지가 주석 처리 되어있습니다.
-    // router.push({ name: 'DetailOops', params: { id: recordId } });
-    toastStore.showToast('Oops 상세 페이지는 현재 준비 중입니다.');
+    router.push({ name: 'DetailOops', params: { id: recordId } });
+    // toastStore.showToast('Oops 상세 페이지는 현재 준비 중입니다.');
   }
 }
 

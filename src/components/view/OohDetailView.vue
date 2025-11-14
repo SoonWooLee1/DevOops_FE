@@ -1,7 +1,7 @@
 <template>
   <div class="page">
-    <button class="back-link" type="button" @click="goList">
-      <span class="arrow">←</span> 돌아가기
+    <button class="back" type="button" @click="router.back()">
+      <span class="arrow"></span><span class="back-text">돌아가기</span>
     </button>
 
     <div class="card" v-if="ooh">
@@ -12,6 +12,7 @@
             <div class="name">{{ ooh.userName }}</div>
             <div class="date">{{ formattedDate }}</div>
           </div>
+          <span class="badge is-ooh">ooh</span>
           <button 
             v-if="!isMine && currentUserId" 
             class="btn follow-btn" 
@@ -470,15 +471,12 @@ async function toggleFollow() {
   padding:28px 16px 88px;
   display:flex; flex-direction:column; align-items:center;
 }
-.back-link{
-  align-self:flex-start; width:100%; max-width:960px;
-  display:inline-flex; gap:8px; align-items:center;
-  background:transparent; border:0; cursor:pointer;
-  font-size:14px; color:#7a6f5b; opacity:.8;
-  transition:opacity .15s ease, transform .15s ease;
+.back{
+  display:flex; align-items:center; gap:8px; margin-bottom:10px;
+  background:none; border:0; cursor:pointer; color:var(--ink);
 }
-.back-link:hover{ opacity:1; transform:translateX(-2px); }
-.arrow{ font-weight:700; }
+.arrow{ width:8px; height:8px; border-left:2px solid var(--ink); border-bottom:2px solid var(--ink); transform:rotate(45deg); }
+.back-text{ font-size:16px; line-height:24px; }
 
 .card{
   width:100%; max-width:960px;
@@ -649,5 +647,21 @@ async function toggleFollow() {
 }
 .btn-footer:hover { text-decoration: underline; }
 .btn-footer:disabled { opacity: 0.5; }
-
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  align-self: center; /* 수직 정렬을 위해 추가 */
+}
+.badge.is-ooh {
+  background-color: rgba(136, 170, 130, 0.2);
+  color: #5a7255;
+}
+.badge.is-oops {
+  background-color: rgba(85, 67, 59, 0.1);
+  color: #55433B;
+}
 </style>
